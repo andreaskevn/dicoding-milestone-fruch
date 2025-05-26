@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import * as bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import prisma from "@/lib/prisma";
 
 export async function POST(request: Request): Promise<Response> {
@@ -8,7 +9,7 @@ export async function POST(request: Request): Promise<Response> {
 
     if (!email || !password) {
       return NextResponse.json(
-        { message: "Email and password are required" },
+        { message: "Email dan password wajib diisi" },
         { status: 400 }
       );
     }
@@ -19,7 +20,7 @@ export async function POST(request: Request): Promise<Response> {
 
     if (!user) {
       return NextResponse.json(
-        { message: "Invalid email or password" },
+        { message: "Email atau password salah" },
         { status: 401 }
       );
     }
@@ -27,22 +28,50 @@ export async function POST(request: Request): Promise<Response> {
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordValid) {
       return NextResponse.json(
-        { message: "Invalid email or password" },
+        { message: "Email atau password salah" },
         { status: 401 }
       );
     }
+
+    const jwtSecret = process.env.JWT_SECRET;
+    const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "1h";
+
+    if (!jwtSecret) {
+      console.error("JWT_SECRET tidak ditemukan di environment variables.");
+      return NextResponse.json(
+        { message: "Kesalahan konfigurasi server" },
+        { status: 500 }
+      );
+    }
+
+    const payload = {
+      userId: user.id,
+      email: user.email,
+    };
+
+    const token = jwt.sign(payload, jwtSecret, {
+      expiresIn: jwtExpiresIn,
+    });
+
+    console.log("Token:", token);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { passwordHash, ...userWithoutPassword } = user;
 
     return NextResponse.json(
-      { message: "Login successful", user: userWithoutPassword },
+      {
+        message: "Login berhasil",
+        user: userWithoutPassword,
+        token: token,
+      },
       { status: 200 }
     );
   } catch (e) {
     console.error("Login Error:", e);
+    const errorMessage =
+      e instanceof Error ? e.message : "Terjadi kesalahan internal";
     return NextResponse.json(
-      { message: "Login failed", error: (e as Error).message },
+      { message: "Login gagal, terjadi kesalahan pada server" },
       { status: 500 }
     );
   }

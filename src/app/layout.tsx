@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "Web-App Pengecekan Tingkat Kematangan Buah",
 };
 
+import { AuthProvider } from "@/context/authContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,7 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

@@ -15,13 +15,37 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid()) // ID unik, cuid() adalah pilihan yang baik
-  email        String   @unique // Email harus unik
-  passwordHash String // Simpan hash password, bukan password asli
-  name         String? // Nama pengguna, opsional
-  createdAt    DateTime @default(now()) // Waktu pembuatan record
-  updatedAt    DateTime @updatedAt // Waktu terakhir update record
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  ScanBuah     ScanBuah[]
+}
 
-  // Tambahkan relasi lain jika diperlukan di masa mendatang
-  // contoh: posts Post[]
+model Buah {
+  id        String     @id @default(cuid())
+  namaBuah  String     @unique
+  manfaat   String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  ScanBuah  ScanBuah[]
+}
+
+model ScanBuah {
+  id                String   @id @default(cuid())
+  predictedBuahName String
+  probability       Float
+  imageUrl          String
+  scannedAt         DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  buahId String?
+  buah   Buah?   @relation(fields: [buahId], references: [id])
+
+  @@index([userId])
+  @@index([buahId])
 }

@@ -18,6 +18,16 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
+ * Model Buah
+ * 
+ */
+export type Buah = $Result.DefaultSelection<Prisma.$BuahPayload>
+/**
+ * Model ScanBuah
+ * 
+ */
+export type ScanBuah = $Result.DefaultSelection<Prisma.$ScanBuahPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -153,6 +163,26 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.buah`: Exposes CRUD operations for the **Buah** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Buahs
+    * const buahs = await prisma.buah.findMany()
+    * ```
+    */
+  get buah(): Prisma.BuahDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.scanBuah`: Exposes CRUD operations for the **ScanBuah** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ScanBuahs
+    * const scanBuahs = await prisma.scanBuah.findMany()
+    * ```
+    */
+  get scanBuah(): Prisma.ScanBuahDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -593,7 +623,9 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    User: 'User'
+    User: 'User',
+    Buah: 'Buah',
+    ScanBuah: 'ScanBuah'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -612,7 +644,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user"
+      modelProps: "user" | "buah" | "scanBuah"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -687,6 +719,154 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      Buah: {
+        payload: Prisma.$BuahPayload<ExtArgs>
+        fields: Prisma.BuahFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BuahFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BuahPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BuahFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BuahPayload>
+          }
+          findFirst: {
+            args: Prisma.BuahFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BuahPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BuahFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BuahPayload>
+          }
+          findMany: {
+            args: Prisma.BuahFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BuahPayload>[]
+          }
+          create: {
+            args: Prisma.BuahCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BuahPayload>
+          }
+          createMany: {
+            args: Prisma.BuahCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BuahCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BuahPayload>[]
+          }
+          delete: {
+            args: Prisma.BuahDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BuahPayload>
+          }
+          update: {
+            args: Prisma.BuahUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BuahPayload>
+          }
+          deleteMany: {
+            args: Prisma.BuahDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BuahUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BuahUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BuahPayload>[]
+          }
+          upsert: {
+            args: Prisma.BuahUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BuahPayload>
+          }
+          aggregate: {
+            args: Prisma.BuahAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBuah>
+          }
+          groupBy: {
+            args: Prisma.BuahGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BuahGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BuahCountArgs<ExtArgs>
+            result: $Utils.Optional<BuahCountAggregateOutputType> | number
+          }
+        }
+      }
+      ScanBuah: {
+        payload: Prisma.$ScanBuahPayload<ExtArgs>
+        fields: Prisma.ScanBuahFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ScanBuahFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScanBuahPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ScanBuahFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScanBuahPayload>
+          }
+          findFirst: {
+            args: Prisma.ScanBuahFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScanBuahPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ScanBuahFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScanBuahPayload>
+          }
+          findMany: {
+            args: Prisma.ScanBuahFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScanBuahPayload>[]
+          }
+          create: {
+            args: Prisma.ScanBuahCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScanBuahPayload>
+          }
+          createMany: {
+            args: Prisma.ScanBuahCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ScanBuahCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScanBuahPayload>[]
+          }
+          delete: {
+            args: Prisma.ScanBuahDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScanBuahPayload>
+          }
+          update: {
+            args: Prisma.ScanBuahUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScanBuahPayload>
+          }
+          deleteMany: {
+            args: Prisma.ScanBuahDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ScanBuahUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ScanBuahUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScanBuahPayload>[]
+          }
+          upsert: {
+            args: Prisma.ScanBuahUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScanBuahPayload>
+          }
+          aggregate: {
+            args: Prisma.ScanBuahAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateScanBuah>
+          }
+          groupBy: {
+            args: Prisma.ScanBuahGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ScanBuahGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ScanBuahCountArgs<ExtArgs>
+            result: $Utils.Optional<ScanBuahCountAggregateOutputType> | number
           }
         }
       }
@@ -775,6 +955,8 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    buah?: BuahOmit
+    scanBuah?: ScanBuahOmit
   }
 
   /* Types for Logging */
@@ -863,6 +1045,67 @@ export namespace Prisma {
    * Count Types
    */
 
+
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    ScanBuah: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ScanBuah?: boolean | UserCountOutputTypeCountScanBuahArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountScanBuahArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScanBuahWhereInput
+  }
+
+
+  /**
+   * Count Type BuahCountOutputType
+   */
+
+  export type BuahCountOutputType = {
+    ScanBuah: number
+  }
+
+  export type BuahCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ScanBuah?: boolean | BuahCountOutputTypeCountScanBuahArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BuahCountOutputType without action
+   */
+  export type BuahCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BuahCountOutputType
+     */
+    select?: BuahCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BuahCountOutputType without action
+   */
+  export type BuahCountOutputTypeCountScanBuahArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScanBuahWhereInput
+  }
 
 
   /**
@@ -1041,6 +1284,8 @@ export namespace Prisma {
     name?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    ScanBuah?: boolean | User$ScanBuahArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1071,10 +1316,18 @@ export namespace Prisma {
   }
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ScanBuah?: boolean | User$ScanBuahArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      ScanBuah: Prisma.$ScanBuahPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       email: string
@@ -1476,6 +1729,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    ScanBuah<T extends User$ScanBuahArgs<ExtArgs> = {}>(args?: Subset<T, User$ScanBuahArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1528,6 +1782,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1546,6 +1804,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -1563,6 +1825,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -1612,6 +1878,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -1660,6 +1930,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -1702,6 +1976,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to create a User.
      */
@@ -1750,6 +2028,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -1817,6 +2099,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The filter to search for the User to update in case it exists.
      */
     where: UserWhereUniqueInput
@@ -1843,6 +2129,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -1863,6 +2153,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.ScanBuah
+   */
+  export type User$ScanBuahArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
+    where?: ScanBuahWhereInput
+    orderBy?: ScanBuahOrderByWithRelationInput | ScanBuahOrderByWithRelationInput[]
+    cursor?: ScanBuahWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ScanBuahScalarFieldEnum | ScanBuahScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1874,6 +2188,2225 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Buah
+   */
+
+  export type AggregateBuah = {
+    _count: BuahCountAggregateOutputType | null
+    _min: BuahMinAggregateOutputType | null
+    _max: BuahMaxAggregateOutputType | null
+  }
+
+  export type BuahMinAggregateOutputType = {
+    id: string | null
+    namaBuah: string | null
+    manfaat: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BuahMaxAggregateOutputType = {
+    id: string | null
+    namaBuah: string | null
+    manfaat: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BuahCountAggregateOutputType = {
+    id: number
+    namaBuah: number
+    manfaat: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BuahMinAggregateInputType = {
+    id?: true
+    namaBuah?: true
+    manfaat?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BuahMaxAggregateInputType = {
+    id?: true
+    namaBuah?: true
+    manfaat?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BuahCountAggregateInputType = {
+    id?: true
+    namaBuah?: true
+    manfaat?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BuahAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Buah to aggregate.
+     */
+    where?: BuahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Buahs to fetch.
+     */
+    orderBy?: BuahOrderByWithRelationInput | BuahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BuahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Buahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Buahs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Buahs
+    **/
+    _count?: true | BuahCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BuahMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BuahMaxAggregateInputType
+  }
+
+  export type GetBuahAggregateType<T extends BuahAggregateArgs> = {
+        [P in keyof T & keyof AggregateBuah]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBuah[P]>
+      : GetScalarType<T[P], AggregateBuah[P]>
+  }
+
+
+
+
+  export type BuahGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BuahWhereInput
+    orderBy?: BuahOrderByWithAggregationInput | BuahOrderByWithAggregationInput[]
+    by: BuahScalarFieldEnum[] | BuahScalarFieldEnum
+    having?: BuahScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BuahCountAggregateInputType | true
+    _min?: BuahMinAggregateInputType
+    _max?: BuahMaxAggregateInputType
+  }
+
+  export type BuahGroupByOutputType = {
+    id: string
+    namaBuah: string
+    manfaat: string
+    createdAt: Date
+    updatedAt: Date
+    _count: BuahCountAggregateOutputType | null
+    _min: BuahMinAggregateOutputType | null
+    _max: BuahMaxAggregateOutputType | null
+  }
+
+  type GetBuahGroupByPayload<T extends BuahGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BuahGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BuahGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BuahGroupByOutputType[P]>
+            : GetScalarType<T[P], BuahGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BuahSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    namaBuah?: boolean
+    manfaat?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    ScanBuah?: boolean | Buah$ScanBuahArgs<ExtArgs>
+    _count?: boolean | BuahCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["buah"]>
+
+  export type BuahSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    namaBuah?: boolean
+    manfaat?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["buah"]>
+
+  export type BuahSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    namaBuah?: boolean
+    manfaat?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["buah"]>
+
+  export type BuahSelectScalar = {
+    id?: boolean
+    namaBuah?: boolean
+    manfaat?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BuahOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "namaBuah" | "manfaat" | "createdAt" | "updatedAt", ExtArgs["result"]["buah"]>
+  export type BuahInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ScanBuah?: boolean | Buah$ScanBuahArgs<ExtArgs>
+    _count?: boolean | BuahCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BuahIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type BuahIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $BuahPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Buah"
+    objects: {
+      ScanBuah: Prisma.$ScanBuahPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      namaBuah: string
+      manfaat: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["buah"]>
+    composites: {}
+  }
+
+  type BuahGetPayload<S extends boolean | null | undefined | BuahDefaultArgs> = $Result.GetResult<Prisma.$BuahPayload, S>
+
+  type BuahCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BuahFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BuahCountAggregateInputType | true
+    }
+
+  export interface BuahDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Buah'], meta: { name: 'Buah' } }
+    /**
+     * Find zero or one Buah that matches the filter.
+     * @param {BuahFindUniqueArgs} args - Arguments to find a Buah
+     * @example
+     * // Get one Buah
+     * const buah = await prisma.buah.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BuahFindUniqueArgs>(args: SelectSubset<T, BuahFindUniqueArgs<ExtArgs>>): Prisma__BuahClient<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Buah that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BuahFindUniqueOrThrowArgs} args - Arguments to find a Buah
+     * @example
+     * // Get one Buah
+     * const buah = await prisma.buah.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BuahFindUniqueOrThrowArgs>(args: SelectSubset<T, BuahFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BuahClient<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Buah that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BuahFindFirstArgs} args - Arguments to find a Buah
+     * @example
+     * // Get one Buah
+     * const buah = await prisma.buah.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BuahFindFirstArgs>(args?: SelectSubset<T, BuahFindFirstArgs<ExtArgs>>): Prisma__BuahClient<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Buah that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BuahFindFirstOrThrowArgs} args - Arguments to find a Buah
+     * @example
+     * // Get one Buah
+     * const buah = await prisma.buah.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BuahFindFirstOrThrowArgs>(args?: SelectSubset<T, BuahFindFirstOrThrowArgs<ExtArgs>>): Prisma__BuahClient<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Buahs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BuahFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Buahs
+     * const buahs = await prisma.buah.findMany()
+     * 
+     * // Get first 10 Buahs
+     * const buahs = await prisma.buah.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const buahWithIdOnly = await prisma.buah.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BuahFindManyArgs>(args?: SelectSubset<T, BuahFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Buah.
+     * @param {BuahCreateArgs} args - Arguments to create a Buah.
+     * @example
+     * // Create one Buah
+     * const Buah = await prisma.buah.create({
+     *   data: {
+     *     // ... data to create a Buah
+     *   }
+     * })
+     * 
+     */
+    create<T extends BuahCreateArgs>(args: SelectSubset<T, BuahCreateArgs<ExtArgs>>): Prisma__BuahClient<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Buahs.
+     * @param {BuahCreateManyArgs} args - Arguments to create many Buahs.
+     * @example
+     * // Create many Buahs
+     * const buah = await prisma.buah.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BuahCreateManyArgs>(args?: SelectSubset<T, BuahCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Buahs and returns the data saved in the database.
+     * @param {BuahCreateManyAndReturnArgs} args - Arguments to create many Buahs.
+     * @example
+     * // Create many Buahs
+     * const buah = await prisma.buah.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Buahs and only return the `id`
+     * const buahWithIdOnly = await prisma.buah.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BuahCreateManyAndReturnArgs>(args?: SelectSubset<T, BuahCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Buah.
+     * @param {BuahDeleteArgs} args - Arguments to delete one Buah.
+     * @example
+     * // Delete one Buah
+     * const Buah = await prisma.buah.delete({
+     *   where: {
+     *     // ... filter to delete one Buah
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BuahDeleteArgs>(args: SelectSubset<T, BuahDeleteArgs<ExtArgs>>): Prisma__BuahClient<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Buah.
+     * @param {BuahUpdateArgs} args - Arguments to update one Buah.
+     * @example
+     * // Update one Buah
+     * const buah = await prisma.buah.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BuahUpdateArgs>(args: SelectSubset<T, BuahUpdateArgs<ExtArgs>>): Prisma__BuahClient<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Buahs.
+     * @param {BuahDeleteManyArgs} args - Arguments to filter Buahs to delete.
+     * @example
+     * // Delete a few Buahs
+     * const { count } = await prisma.buah.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BuahDeleteManyArgs>(args?: SelectSubset<T, BuahDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Buahs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BuahUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Buahs
+     * const buah = await prisma.buah.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BuahUpdateManyArgs>(args: SelectSubset<T, BuahUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Buahs and returns the data updated in the database.
+     * @param {BuahUpdateManyAndReturnArgs} args - Arguments to update many Buahs.
+     * @example
+     * // Update many Buahs
+     * const buah = await prisma.buah.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Buahs and only return the `id`
+     * const buahWithIdOnly = await prisma.buah.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BuahUpdateManyAndReturnArgs>(args: SelectSubset<T, BuahUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Buah.
+     * @param {BuahUpsertArgs} args - Arguments to update or create a Buah.
+     * @example
+     * // Update or create a Buah
+     * const buah = await prisma.buah.upsert({
+     *   create: {
+     *     // ... data to create a Buah
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Buah we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BuahUpsertArgs>(args: SelectSubset<T, BuahUpsertArgs<ExtArgs>>): Prisma__BuahClient<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Buahs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BuahCountArgs} args - Arguments to filter Buahs to count.
+     * @example
+     * // Count the number of Buahs
+     * const count = await prisma.buah.count({
+     *   where: {
+     *     // ... the filter for the Buahs we want to count
+     *   }
+     * })
+    **/
+    count<T extends BuahCountArgs>(
+      args?: Subset<T, BuahCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BuahCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Buah.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BuahAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BuahAggregateArgs>(args: Subset<T, BuahAggregateArgs>): Prisma.PrismaPromise<GetBuahAggregateType<T>>
+
+    /**
+     * Group by Buah.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BuahGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BuahGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BuahGroupByArgs['orderBy'] }
+        : { orderBy?: BuahGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BuahGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBuahGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Buah model
+   */
+  readonly fields: BuahFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Buah.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BuahClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    ScanBuah<T extends Buah$ScanBuahArgs<ExtArgs> = {}>(args?: Subset<T, Buah$ScanBuahArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Buah model
+   */
+  interface BuahFieldRefs {
+    readonly id: FieldRef<"Buah", 'String'>
+    readonly namaBuah: FieldRef<"Buah", 'String'>
+    readonly manfaat: FieldRef<"Buah", 'String'>
+    readonly createdAt: FieldRef<"Buah", 'DateTime'>
+    readonly updatedAt: FieldRef<"Buah", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Buah findUnique
+   */
+  export type BuahFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BuahInclude<ExtArgs> | null
+    /**
+     * Filter, which Buah to fetch.
+     */
+    where: BuahWhereUniqueInput
+  }
+
+  /**
+   * Buah findUniqueOrThrow
+   */
+  export type BuahFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BuahInclude<ExtArgs> | null
+    /**
+     * Filter, which Buah to fetch.
+     */
+    where: BuahWhereUniqueInput
+  }
+
+  /**
+   * Buah findFirst
+   */
+  export type BuahFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BuahInclude<ExtArgs> | null
+    /**
+     * Filter, which Buah to fetch.
+     */
+    where?: BuahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Buahs to fetch.
+     */
+    orderBy?: BuahOrderByWithRelationInput | BuahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Buahs.
+     */
+    cursor?: BuahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Buahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Buahs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Buahs.
+     */
+    distinct?: BuahScalarFieldEnum | BuahScalarFieldEnum[]
+  }
+
+  /**
+   * Buah findFirstOrThrow
+   */
+  export type BuahFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BuahInclude<ExtArgs> | null
+    /**
+     * Filter, which Buah to fetch.
+     */
+    where?: BuahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Buahs to fetch.
+     */
+    orderBy?: BuahOrderByWithRelationInput | BuahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Buahs.
+     */
+    cursor?: BuahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Buahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Buahs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Buahs.
+     */
+    distinct?: BuahScalarFieldEnum | BuahScalarFieldEnum[]
+  }
+
+  /**
+   * Buah findMany
+   */
+  export type BuahFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BuahInclude<ExtArgs> | null
+    /**
+     * Filter, which Buahs to fetch.
+     */
+    where?: BuahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Buahs to fetch.
+     */
+    orderBy?: BuahOrderByWithRelationInput | BuahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Buahs.
+     */
+    cursor?: BuahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Buahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Buahs.
+     */
+    skip?: number
+    distinct?: BuahScalarFieldEnum | BuahScalarFieldEnum[]
+  }
+
+  /**
+   * Buah create
+   */
+  export type BuahCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BuahInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Buah.
+     */
+    data: XOR<BuahCreateInput, BuahUncheckedCreateInput>
+  }
+
+  /**
+   * Buah createMany
+   */
+  export type BuahCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Buahs.
+     */
+    data: BuahCreateManyInput | BuahCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Buah createManyAndReturn
+   */
+  export type BuahCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * The data used to create many Buahs.
+     */
+    data: BuahCreateManyInput | BuahCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Buah update
+   */
+  export type BuahUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BuahInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Buah.
+     */
+    data: XOR<BuahUpdateInput, BuahUncheckedUpdateInput>
+    /**
+     * Choose, which Buah to update.
+     */
+    where: BuahWhereUniqueInput
+  }
+
+  /**
+   * Buah updateMany
+   */
+  export type BuahUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Buahs.
+     */
+    data: XOR<BuahUpdateManyMutationInput, BuahUncheckedUpdateManyInput>
+    /**
+     * Filter which Buahs to update
+     */
+    where?: BuahWhereInput
+    /**
+     * Limit how many Buahs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Buah updateManyAndReturn
+   */
+  export type BuahUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * The data used to update Buahs.
+     */
+    data: XOR<BuahUpdateManyMutationInput, BuahUncheckedUpdateManyInput>
+    /**
+     * Filter which Buahs to update
+     */
+    where?: BuahWhereInput
+    /**
+     * Limit how many Buahs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Buah upsert
+   */
+  export type BuahUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BuahInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Buah to update in case it exists.
+     */
+    where: BuahWhereUniqueInput
+    /**
+     * In case the Buah found by the `where` argument doesn't exist, create a new Buah with this data.
+     */
+    create: XOR<BuahCreateInput, BuahUncheckedCreateInput>
+    /**
+     * In case the Buah was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BuahUpdateInput, BuahUncheckedUpdateInput>
+  }
+
+  /**
+   * Buah delete
+   */
+  export type BuahDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BuahInclude<ExtArgs> | null
+    /**
+     * Filter which Buah to delete.
+     */
+    where: BuahWhereUniqueInput
+  }
+
+  /**
+   * Buah deleteMany
+   */
+  export type BuahDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Buahs to delete
+     */
+    where?: BuahWhereInput
+    /**
+     * Limit how many Buahs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Buah.ScanBuah
+   */
+  export type Buah$ScanBuahArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
+    where?: ScanBuahWhereInput
+    orderBy?: ScanBuahOrderByWithRelationInput | ScanBuahOrderByWithRelationInput[]
+    cursor?: ScanBuahWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ScanBuahScalarFieldEnum | ScanBuahScalarFieldEnum[]
+  }
+
+  /**
+   * Buah without action
+   */
+  export type BuahDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BuahInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ScanBuah
+   */
+
+  export type AggregateScanBuah = {
+    _count: ScanBuahCountAggregateOutputType | null
+    _avg: ScanBuahAvgAggregateOutputType | null
+    _sum: ScanBuahSumAggregateOutputType | null
+    _min: ScanBuahMinAggregateOutputType | null
+    _max: ScanBuahMaxAggregateOutputType | null
+  }
+
+  export type ScanBuahAvgAggregateOutputType = {
+    probability: number | null
+  }
+
+  export type ScanBuahSumAggregateOutputType = {
+    probability: number | null
+  }
+
+  export type ScanBuahMinAggregateOutputType = {
+    id: string | null
+    predictedBuahName: string | null
+    probability: number | null
+    imageUrl: string | null
+    scannedAt: Date | null
+    userId: string | null
+    buahId: string | null
+  }
+
+  export type ScanBuahMaxAggregateOutputType = {
+    id: string | null
+    predictedBuahName: string | null
+    probability: number | null
+    imageUrl: string | null
+    scannedAt: Date | null
+    userId: string | null
+    buahId: string | null
+  }
+
+  export type ScanBuahCountAggregateOutputType = {
+    id: number
+    predictedBuahName: number
+    probability: number
+    imageUrl: number
+    scannedAt: number
+    userId: number
+    buahId: number
+    _all: number
+  }
+
+
+  export type ScanBuahAvgAggregateInputType = {
+    probability?: true
+  }
+
+  export type ScanBuahSumAggregateInputType = {
+    probability?: true
+  }
+
+  export type ScanBuahMinAggregateInputType = {
+    id?: true
+    predictedBuahName?: true
+    probability?: true
+    imageUrl?: true
+    scannedAt?: true
+    userId?: true
+    buahId?: true
+  }
+
+  export type ScanBuahMaxAggregateInputType = {
+    id?: true
+    predictedBuahName?: true
+    probability?: true
+    imageUrl?: true
+    scannedAt?: true
+    userId?: true
+    buahId?: true
+  }
+
+  export type ScanBuahCountAggregateInputType = {
+    id?: true
+    predictedBuahName?: true
+    probability?: true
+    imageUrl?: true
+    scannedAt?: true
+    userId?: true
+    buahId?: true
+    _all?: true
+  }
+
+  export type ScanBuahAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScanBuah to aggregate.
+     */
+    where?: ScanBuahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScanBuahs to fetch.
+     */
+    orderBy?: ScanBuahOrderByWithRelationInput | ScanBuahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ScanBuahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScanBuahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScanBuahs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ScanBuahs
+    **/
+    _count?: true | ScanBuahCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ScanBuahAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ScanBuahSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ScanBuahMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ScanBuahMaxAggregateInputType
+  }
+
+  export type GetScanBuahAggregateType<T extends ScanBuahAggregateArgs> = {
+        [P in keyof T & keyof AggregateScanBuah]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateScanBuah[P]>
+      : GetScalarType<T[P], AggregateScanBuah[P]>
+  }
+
+
+
+
+  export type ScanBuahGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScanBuahWhereInput
+    orderBy?: ScanBuahOrderByWithAggregationInput | ScanBuahOrderByWithAggregationInput[]
+    by: ScanBuahScalarFieldEnum[] | ScanBuahScalarFieldEnum
+    having?: ScanBuahScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ScanBuahCountAggregateInputType | true
+    _avg?: ScanBuahAvgAggregateInputType
+    _sum?: ScanBuahSumAggregateInputType
+    _min?: ScanBuahMinAggregateInputType
+    _max?: ScanBuahMaxAggregateInputType
+  }
+
+  export type ScanBuahGroupByOutputType = {
+    id: string
+    predictedBuahName: string
+    probability: number
+    imageUrl: string
+    scannedAt: Date
+    userId: string
+    buahId: string | null
+    _count: ScanBuahCountAggregateOutputType | null
+    _avg: ScanBuahAvgAggregateOutputType | null
+    _sum: ScanBuahSumAggregateOutputType | null
+    _min: ScanBuahMinAggregateOutputType | null
+    _max: ScanBuahMaxAggregateOutputType | null
+  }
+
+  type GetScanBuahGroupByPayload<T extends ScanBuahGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ScanBuahGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ScanBuahGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ScanBuahGroupByOutputType[P]>
+            : GetScalarType<T[P], ScanBuahGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ScanBuahSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    predictedBuahName?: boolean
+    probability?: boolean
+    imageUrl?: boolean
+    scannedAt?: boolean
+    userId?: boolean
+    buahId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    buah?: boolean | ScanBuah$buahArgs<ExtArgs>
+  }, ExtArgs["result"]["scanBuah"]>
+
+  export type ScanBuahSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    predictedBuahName?: boolean
+    probability?: boolean
+    imageUrl?: boolean
+    scannedAt?: boolean
+    userId?: boolean
+    buahId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    buah?: boolean | ScanBuah$buahArgs<ExtArgs>
+  }, ExtArgs["result"]["scanBuah"]>
+
+  export type ScanBuahSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    predictedBuahName?: boolean
+    probability?: boolean
+    imageUrl?: boolean
+    scannedAt?: boolean
+    userId?: boolean
+    buahId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    buah?: boolean | ScanBuah$buahArgs<ExtArgs>
+  }, ExtArgs["result"]["scanBuah"]>
+
+  export type ScanBuahSelectScalar = {
+    id?: boolean
+    predictedBuahName?: boolean
+    probability?: boolean
+    imageUrl?: boolean
+    scannedAt?: boolean
+    userId?: boolean
+    buahId?: boolean
+  }
+
+  export type ScanBuahOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "predictedBuahName" | "probability" | "imageUrl" | "scannedAt" | "userId" | "buahId", ExtArgs["result"]["scanBuah"]>
+  export type ScanBuahInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    buah?: boolean | ScanBuah$buahArgs<ExtArgs>
+  }
+  export type ScanBuahIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    buah?: boolean | ScanBuah$buahArgs<ExtArgs>
+  }
+  export type ScanBuahIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    buah?: boolean | ScanBuah$buahArgs<ExtArgs>
+  }
+
+  export type $ScanBuahPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ScanBuah"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      buah: Prisma.$BuahPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      predictedBuahName: string
+      probability: number
+      imageUrl: string
+      scannedAt: Date
+      userId: string
+      buahId: string | null
+    }, ExtArgs["result"]["scanBuah"]>
+    composites: {}
+  }
+
+  type ScanBuahGetPayload<S extends boolean | null | undefined | ScanBuahDefaultArgs> = $Result.GetResult<Prisma.$ScanBuahPayload, S>
+
+  type ScanBuahCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ScanBuahFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ScanBuahCountAggregateInputType | true
+    }
+
+  export interface ScanBuahDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ScanBuah'], meta: { name: 'ScanBuah' } }
+    /**
+     * Find zero or one ScanBuah that matches the filter.
+     * @param {ScanBuahFindUniqueArgs} args - Arguments to find a ScanBuah
+     * @example
+     * // Get one ScanBuah
+     * const scanBuah = await prisma.scanBuah.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ScanBuahFindUniqueArgs>(args: SelectSubset<T, ScanBuahFindUniqueArgs<ExtArgs>>): Prisma__ScanBuahClient<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ScanBuah that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ScanBuahFindUniqueOrThrowArgs} args - Arguments to find a ScanBuah
+     * @example
+     * // Get one ScanBuah
+     * const scanBuah = await prisma.scanBuah.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ScanBuahFindUniqueOrThrowArgs>(args: SelectSubset<T, ScanBuahFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ScanBuahClient<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ScanBuah that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScanBuahFindFirstArgs} args - Arguments to find a ScanBuah
+     * @example
+     * // Get one ScanBuah
+     * const scanBuah = await prisma.scanBuah.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ScanBuahFindFirstArgs>(args?: SelectSubset<T, ScanBuahFindFirstArgs<ExtArgs>>): Prisma__ScanBuahClient<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ScanBuah that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScanBuahFindFirstOrThrowArgs} args - Arguments to find a ScanBuah
+     * @example
+     * // Get one ScanBuah
+     * const scanBuah = await prisma.scanBuah.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ScanBuahFindFirstOrThrowArgs>(args?: SelectSubset<T, ScanBuahFindFirstOrThrowArgs<ExtArgs>>): Prisma__ScanBuahClient<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ScanBuahs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScanBuahFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ScanBuahs
+     * const scanBuahs = await prisma.scanBuah.findMany()
+     * 
+     * // Get first 10 ScanBuahs
+     * const scanBuahs = await prisma.scanBuah.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const scanBuahWithIdOnly = await prisma.scanBuah.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ScanBuahFindManyArgs>(args?: SelectSubset<T, ScanBuahFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ScanBuah.
+     * @param {ScanBuahCreateArgs} args - Arguments to create a ScanBuah.
+     * @example
+     * // Create one ScanBuah
+     * const ScanBuah = await prisma.scanBuah.create({
+     *   data: {
+     *     // ... data to create a ScanBuah
+     *   }
+     * })
+     * 
+     */
+    create<T extends ScanBuahCreateArgs>(args: SelectSubset<T, ScanBuahCreateArgs<ExtArgs>>): Prisma__ScanBuahClient<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ScanBuahs.
+     * @param {ScanBuahCreateManyArgs} args - Arguments to create many ScanBuahs.
+     * @example
+     * // Create many ScanBuahs
+     * const scanBuah = await prisma.scanBuah.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ScanBuahCreateManyArgs>(args?: SelectSubset<T, ScanBuahCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ScanBuahs and returns the data saved in the database.
+     * @param {ScanBuahCreateManyAndReturnArgs} args - Arguments to create many ScanBuahs.
+     * @example
+     * // Create many ScanBuahs
+     * const scanBuah = await prisma.scanBuah.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ScanBuahs and only return the `id`
+     * const scanBuahWithIdOnly = await prisma.scanBuah.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ScanBuahCreateManyAndReturnArgs>(args?: SelectSubset<T, ScanBuahCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ScanBuah.
+     * @param {ScanBuahDeleteArgs} args - Arguments to delete one ScanBuah.
+     * @example
+     * // Delete one ScanBuah
+     * const ScanBuah = await prisma.scanBuah.delete({
+     *   where: {
+     *     // ... filter to delete one ScanBuah
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ScanBuahDeleteArgs>(args: SelectSubset<T, ScanBuahDeleteArgs<ExtArgs>>): Prisma__ScanBuahClient<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ScanBuah.
+     * @param {ScanBuahUpdateArgs} args - Arguments to update one ScanBuah.
+     * @example
+     * // Update one ScanBuah
+     * const scanBuah = await prisma.scanBuah.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ScanBuahUpdateArgs>(args: SelectSubset<T, ScanBuahUpdateArgs<ExtArgs>>): Prisma__ScanBuahClient<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ScanBuahs.
+     * @param {ScanBuahDeleteManyArgs} args - Arguments to filter ScanBuahs to delete.
+     * @example
+     * // Delete a few ScanBuahs
+     * const { count } = await prisma.scanBuah.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ScanBuahDeleteManyArgs>(args?: SelectSubset<T, ScanBuahDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ScanBuahs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScanBuahUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ScanBuahs
+     * const scanBuah = await prisma.scanBuah.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ScanBuahUpdateManyArgs>(args: SelectSubset<T, ScanBuahUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ScanBuahs and returns the data updated in the database.
+     * @param {ScanBuahUpdateManyAndReturnArgs} args - Arguments to update many ScanBuahs.
+     * @example
+     * // Update many ScanBuahs
+     * const scanBuah = await prisma.scanBuah.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ScanBuahs and only return the `id`
+     * const scanBuahWithIdOnly = await prisma.scanBuah.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ScanBuahUpdateManyAndReturnArgs>(args: SelectSubset<T, ScanBuahUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ScanBuah.
+     * @param {ScanBuahUpsertArgs} args - Arguments to update or create a ScanBuah.
+     * @example
+     * // Update or create a ScanBuah
+     * const scanBuah = await prisma.scanBuah.upsert({
+     *   create: {
+     *     // ... data to create a ScanBuah
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ScanBuah we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ScanBuahUpsertArgs>(args: SelectSubset<T, ScanBuahUpsertArgs<ExtArgs>>): Prisma__ScanBuahClient<$Result.GetResult<Prisma.$ScanBuahPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ScanBuahs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScanBuahCountArgs} args - Arguments to filter ScanBuahs to count.
+     * @example
+     * // Count the number of ScanBuahs
+     * const count = await prisma.scanBuah.count({
+     *   where: {
+     *     // ... the filter for the ScanBuahs we want to count
+     *   }
+     * })
+    **/
+    count<T extends ScanBuahCountArgs>(
+      args?: Subset<T, ScanBuahCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ScanBuahCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ScanBuah.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScanBuahAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ScanBuahAggregateArgs>(args: Subset<T, ScanBuahAggregateArgs>): Prisma.PrismaPromise<GetScanBuahAggregateType<T>>
+
+    /**
+     * Group by ScanBuah.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScanBuahGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ScanBuahGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ScanBuahGroupByArgs['orderBy'] }
+        : { orderBy?: ScanBuahGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ScanBuahGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScanBuahGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ScanBuah model
+   */
+  readonly fields: ScanBuahFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ScanBuah.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ScanBuahClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    buah<T extends ScanBuah$buahArgs<ExtArgs> = {}>(args?: Subset<T, ScanBuah$buahArgs<ExtArgs>>): Prisma__BuahClient<$Result.GetResult<Prisma.$BuahPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ScanBuah model
+   */
+  interface ScanBuahFieldRefs {
+    readonly id: FieldRef<"ScanBuah", 'String'>
+    readonly predictedBuahName: FieldRef<"ScanBuah", 'String'>
+    readonly probability: FieldRef<"ScanBuah", 'Float'>
+    readonly imageUrl: FieldRef<"ScanBuah", 'String'>
+    readonly scannedAt: FieldRef<"ScanBuah", 'DateTime'>
+    readonly userId: FieldRef<"ScanBuah", 'String'>
+    readonly buahId: FieldRef<"ScanBuah", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ScanBuah findUnique
+   */
+  export type ScanBuahFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
+    /**
+     * Filter, which ScanBuah to fetch.
+     */
+    where: ScanBuahWhereUniqueInput
+  }
+
+  /**
+   * ScanBuah findUniqueOrThrow
+   */
+  export type ScanBuahFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
+    /**
+     * Filter, which ScanBuah to fetch.
+     */
+    where: ScanBuahWhereUniqueInput
+  }
+
+  /**
+   * ScanBuah findFirst
+   */
+  export type ScanBuahFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
+    /**
+     * Filter, which ScanBuah to fetch.
+     */
+    where?: ScanBuahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScanBuahs to fetch.
+     */
+    orderBy?: ScanBuahOrderByWithRelationInput | ScanBuahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ScanBuahs.
+     */
+    cursor?: ScanBuahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScanBuahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScanBuahs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ScanBuahs.
+     */
+    distinct?: ScanBuahScalarFieldEnum | ScanBuahScalarFieldEnum[]
+  }
+
+  /**
+   * ScanBuah findFirstOrThrow
+   */
+  export type ScanBuahFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
+    /**
+     * Filter, which ScanBuah to fetch.
+     */
+    where?: ScanBuahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScanBuahs to fetch.
+     */
+    orderBy?: ScanBuahOrderByWithRelationInput | ScanBuahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ScanBuahs.
+     */
+    cursor?: ScanBuahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScanBuahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScanBuahs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ScanBuahs.
+     */
+    distinct?: ScanBuahScalarFieldEnum | ScanBuahScalarFieldEnum[]
+  }
+
+  /**
+   * ScanBuah findMany
+   */
+  export type ScanBuahFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
+    /**
+     * Filter, which ScanBuahs to fetch.
+     */
+    where?: ScanBuahWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScanBuahs to fetch.
+     */
+    orderBy?: ScanBuahOrderByWithRelationInput | ScanBuahOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ScanBuahs.
+     */
+    cursor?: ScanBuahWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScanBuahs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScanBuahs.
+     */
+    skip?: number
+    distinct?: ScanBuahScalarFieldEnum | ScanBuahScalarFieldEnum[]
+  }
+
+  /**
+   * ScanBuah create
+   */
+  export type ScanBuahCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ScanBuah.
+     */
+    data: XOR<ScanBuahCreateInput, ScanBuahUncheckedCreateInput>
+  }
+
+  /**
+   * ScanBuah createMany
+   */
+  export type ScanBuahCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ScanBuahs.
+     */
+    data: ScanBuahCreateManyInput | ScanBuahCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ScanBuah createManyAndReturn
+   */
+  export type ScanBuahCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * The data used to create many ScanBuahs.
+     */
+    data: ScanBuahCreateManyInput | ScanBuahCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ScanBuah update
+   */
+  export type ScanBuahUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ScanBuah.
+     */
+    data: XOR<ScanBuahUpdateInput, ScanBuahUncheckedUpdateInput>
+    /**
+     * Choose, which ScanBuah to update.
+     */
+    where: ScanBuahWhereUniqueInput
+  }
+
+  /**
+   * ScanBuah updateMany
+   */
+  export type ScanBuahUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ScanBuahs.
+     */
+    data: XOR<ScanBuahUpdateManyMutationInput, ScanBuahUncheckedUpdateManyInput>
+    /**
+     * Filter which ScanBuahs to update
+     */
+    where?: ScanBuahWhereInput
+    /**
+     * Limit how many ScanBuahs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ScanBuah updateManyAndReturn
+   */
+  export type ScanBuahUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * The data used to update ScanBuahs.
+     */
+    data: XOR<ScanBuahUpdateManyMutationInput, ScanBuahUncheckedUpdateManyInput>
+    /**
+     * Filter which ScanBuahs to update
+     */
+    where?: ScanBuahWhereInput
+    /**
+     * Limit how many ScanBuahs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ScanBuah upsert
+   */
+  export type ScanBuahUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ScanBuah to update in case it exists.
+     */
+    where: ScanBuahWhereUniqueInput
+    /**
+     * In case the ScanBuah found by the `where` argument doesn't exist, create a new ScanBuah with this data.
+     */
+    create: XOR<ScanBuahCreateInput, ScanBuahUncheckedCreateInput>
+    /**
+     * In case the ScanBuah was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ScanBuahUpdateInput, ScanBuahUncheckedUpdateInput>
+  }
+
+  /**
+   * ScanBuah delete
+   */
+  export type ScanBuahDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
+    /**
+     * Filter which ScanBuah to delete.
+     */
+    where: ScanBuahWhereUniqueInput
+  }
+
+  /**
+   * ScanBuah deleteMany
+   */
+  export type ScanBuahDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScanBuahs to delete
+     */
+    where?: ScanBuahWhereInput
+    /**
+     * Limit how many ScanBuahs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ScanBuah.buah
+   */
+  export type ScanBuah$buahArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Buah
+     */
+    select?: BuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Buah
+     */
+    omit?: BuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BuahInclude<ExtArgs> | null
+    where?: BuahWhereInput
+  }
+
+  /**
+   * ScanBuah without action
+   */
+  export type ScanBuahDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScanBuah
+     */
+    select?: ScanBuahSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScanBuah
+     */
+    omit?: ScanBuahOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScanBuahInclude<ExtArgs> | null
   }
 
 
@@ -1901,6 +4434,30 @@ export namespace Prisma {
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+  export const BuahScalarFieldEnum: {
+    id: 'id',
+    namaBuah: 'namaBuah',
+    manfaat: 'manfaat',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BuahScalarFieldEnum = (typeof BuahScalarFieldEnum)[keyof typeof BuahScalarFieldEnum]
+
+
+  export const ScanBuahScalarFieldEnum: {
+    id: 'id',
+    predictedBuahName: 'predictedBuahName',
+    probability: 'probability',
+    imageUrl: 'imageUrl',
+    scannedAt: 'scannedAt',
+    userId: 'userId',
+    buahId: 'buahId'
+  };
+
+  export type ScanBuahScalarFieldEnum = (typeof ScanBuahScalarFieldEnum)[keyof typeof ScanBuahScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -1961,6 +4518,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1987,6 +4558,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    ScanBuah?: ScanBuahListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -1996,6 +4568,7 @@ export namespace Prisma {
     name?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    ScanBuah?: ScanBuahOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -2008,6 +4581,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    ScanBuah?: ScanBuahListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -2034,6 +4608,131 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
+  export type BuahWhereInput = {
+    AND?: BuahWhereInput | BuahWhereInput[]
+    OR?: BuahWhereInput[]
+    NOT?: BuahWhereInput | BuahWhereInput[]
+    id?: StringFilter<"Buah"> | string
+    namaBuah?: StringFilter<"Buah"> | string
+    manfaat?: StringFilter<"Buah"> | string
+    createdAt?: DateTimeFilter<"Buah"> | Date | string
+    updatedAt?: DateTimeFilter<"Buah"> | Date | string
+    ScanBuah?: ScanBuahListRelationFilter
+  }
+
+  export type BuahOrderByWithRelationInput = {
+    id?: SortOrder
+    namaBuah?: SortOrder
+    manfaat?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    ScanBuah?: ScanBuahOrderByRelationAggregateInput
+  }
+
+  export type BuahWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    namaBuah?: string
+    AND?: BuahWhereInput | BuahWhereInput[]
+    OR?: BuahWhereInput[]
+    NOT?: BuahWhereInput | BuahWhereInput[]
+    manfaat?: StringFilter<"Buah"> | string
+    createdAt?: DateTimeFilter<"Buah"> | Date | string
+    updatedAt?: DateTimeFilter<"Buah"> | Date | string
+    ScanBuah?: ScanBuahListRelationFilter
+  }, "id" | "namaBuah">
+
+  export type BuahOrderByWithAggregationInput = {
+    id?: SortOrder
+    namaBuah?: SortOrder
+    manfaat?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BuahCountOrderByAggregateInput
+    _max?: BuahMaxOrderByAggregateInput
+    _min?: BuahMinOrderByAggregateInput
+  }
+
+  export type BuahScalarWhereWithAggregatesInput = {
+    AND?: BuahScalarWhereWithAggregatesInput | BuahScalarWhereWithAggregatesInput[]
+    OR?: BuahScalarWhereWithAggregatesInput[]
+    NOT?: BuahScalarWhereWithAggregatesInput | BuahScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Buah"> | string
+    namaBuah?: StringWithAggregatesFilter<"Buah"> | string
+    manfaat?: StringWithAggregatesFilter<"Buah"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Buah"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Buah"> | Date | string
+  }
+
+  export type ScanBuahWhereInput = {
+    AND?: ScanBuahWhereInput | ScanBuahWhereInput[]
+    OR?: ScanBuahWhereInput[]
+    NOT?: ScanBuahWhereInput | ScanBuahWhereInput[]
+    id?: StringFilter<"ScanBuah"> | string
+    predictedBuahName?: StringFilter<"ScanBuah"> | string
+    probability?: FloatFilter<"ScanBuah"> | number
+    imageUrl?: StringFilter<"ScanBuah"> | string
+    scannedAt?: DateTimeFilter<"ScanBuah"> | Date | string
+    userId?: StringFilter<"ScanBuah"> | string
+    buahId?: StringNullableFilter<"ScanBuah"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    buah?: XOR<BuahNullableScalarRelationFilter, BuahWhereInput> | null
+  }
+
+  export type ScanBuahOrderByWithRelationInput = {
+    id?: SortOrder
+    predictedBuahName?: SortOrder
+    probability?: SortOrder
+    imageUrl?: SortOrder
+    scannedAt?: SortOrder
+    userId?: SortOrder
+    buahId?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+    buah?: BuahOrderByWithRelationInput
+  }
+
+  export type ScanBuahWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ScanBuahWhereInput | ScanBuahWhereInput[]
+    OR?: ScanBuahWhereInput[]
+    NOT?: ScanBuahWhereInput | ScanBuahWhereInput[]
+    predictedBuahName?: StringFilter<"ScanBuah"> | string
+    probability?: FloatFilter<"ScanBuah"> | number
+    imageUrl?: StringFilter<"ScanBuah"> | string
+    scannedAt?: DateTimeFilter<"ScanBuah"> | Date | string
+    userId?: StringFilter<"ScanBuah"> | string
+    buahId?: StringNullableFilter<"ScanBuah"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    buah?: XOR<BuahNullableScalarRelationFilter, BuahWhereInput> | null
+  }, "id">
+
+  export type ScanBuahOrderByWithAggregationInput = {
+    id?: SortOrder
+    predictedBuahName?: SortOrder
+    probability?: SortOrder
+    imageUrl?: SortOrder
+    scannedAt?: SortOrder
+    userId?: SortOrder
+    buahId?: SortOrderInput | SortOrder
+    _count?: ScanBuahCountOrderByAggregateInput
+    _avg?: ScanBuahAvgOrderByAggregateInput
+    _max?: ScanBuahMaxOrderByAggregateInput
+    _min?: ScanBuahMinOrderByAggregateInput
+    _sum?: ScanBuahSumOrderByAggregateInput
+  }
+
+  export type ScanBuahScalarWhereWithAggregatesInput = {
+    AND?: ScanBuahScalarWhereWithAggregatesInput | ScanBuahScalarWhereWithAggregatesInput[]
+    OR?: ScanBuahScalarWhereWithAggregatesInput[]
+    NOT?: ScanBuahScalarWhereWithAggregatesInput | ScanBuahScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ScanBuah"> | string
+    predictedBuahName?: StringWithAggregatesFilter<"ScanBuah"> | string
+    probability?: FloatWithAggregatesFilter<"ScanBuah"> | number
+    imageUrl?: StringWithAggregatesFilter<"ScanBuah"> | string
+    scannedAt?: DateTimeWithAggregatesFilter<"ScanBuah"> | Date | string
+    userId?: StringWithAggregatesFilter<"ScanBuah"> | string
+    buahId?: StringNullableWithAggregatesFilter<"ScanBuah"> | string | null
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -2041,6 +4740,7 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    ScanBuah?: ScanBuahCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -2050,6 +4750,7 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    ScanBuah?: ScanBuahUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -2059,6 +4760,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ScanBuah?: ScanBuahUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -2068,6 +4770,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ScanBuah?: ScanBuahUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -2095,6 +4798,134 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BuahCreateInput = {
+    id?: string
+    namaBuah: string
+    manfaat: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ScanBuah?: ScanBuahCreateNestedManyWithoutBuahInput
+  }
+
+  export type BuahUncheckedCreateInput = {
+    id?: string
+    namaBuah: string
+    manfaat: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    ScanBuah?: ScanBuahUncheckedCreateNestedManyWithoutBuahInput
+  }
+
+  export type BuahUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namaBuah?: StringFieldUpdateOperationsInput | string
+    manfaat?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ScanBuah?: ScanBuahUpdateManyWithoutBuahNestedInput
+  }
+
+  export type BuahUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namaBuah?: StringFieldUpdateOperationsInput | string
+    manfaat?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ScanBuah?: ScanBuahUncheckedUpdateManyWithoutBuahNestedInput
+  }
+
+  export type BuahCreateManyInput = {
+    id?: string
+    namaBuah: string
+    manfaat: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BuahUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namaBuah?: StringFieldUpdateOperationsInput | string
+    manfaat?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BuahUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namaBuah?: StringFieldUpdateOperationsInput | string
+    manfaat?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScanBuahCreateInput = {
+    id?: string
+    predictedBuahName: string
+    probability: number
+    imageUrl: string
+    scannedAt?: Date | string
+    user: UserCreateNestedOneWithoutScanBuahInput
+    buah?: BuahCreateNestedOneWithoutScanBuahInput
+  }
+
+  export type ScanBuahUncheckedCreateInput = {
+    id?: string
+    predictedBuahName: string
+    probability: number
+    imageUrl: string
+    scannedAt?: Date | string
+    userId: string
+    buahId?: string | null
+  }
+
+  export type ScanBuahUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    predictedBuahName?: StringFieldUpdateOperationsInput | string
+    probability?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutScanBuahNestedInput
+    buah?: BuahUpdateOneWithoutScanBuahNestedInput
+  }
+
+  export type ScanBuahUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    predictedBuahName?: StringFieldUpdateOperationsInput | string
+    probability?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+    buahId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ScanBuahCreateManyInput = {
+    id?: string
+    predictedBuahName: string
+    probability: number
+    imageUrl: string
+    scannedAt?: Date | string
+    userId: string
+    buahId?: string | null
+  }
+
+  export type ScanBuahUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    predictedBuahName?: StringFieldUpdateOperationsInput | string
+    probability?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScanBuahUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    predictedBuahName?: StringFieldUpdateOperationsInput | string
+    probability?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+    buahId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -2138,9 +4969,19 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type ScanBuahListRelationFilter = {
+    every?: ScanBuahWhereInput
+    some?: ScanBuahWhereInput
+    none?: ScanBuahWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type ScanBuahOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UserCountOrderByAggregateInput = {
@@ -2220,6 +5061,119 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type BuahCountOrderByAggregateInput = {
+    id?: SortOrder
+    namaBuah?: SortOrder
+    manfaat?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BuahMaxOrderByAggregateInput = {
+    id?: SortOrder
+    namaBuah?: SortOrder
+    manfaat?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BuahMinOrderByAggregateInput = {
+    id?: SortOrder
+    namaBuah?: SortOrder
+    manfaat?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type BuahNullableScalarRelationFilter = {
+    is?: BuahWhereInput | null
+    isNot?: BuahWhereInput | null
+  }
+
+  export type ScanBuahCountOrderByAggregateInput = {
+    id?: SortOrder
+    predictedBuahName?: SortOrder
+    probability?: SortOrder
+    imageUrl?: SortOrder
+    scannedAt?: SortOrder
+    userId?: SortOrder
+    buahId?: SortOrder
+  }
+
+  export type ScanBuahAvgOrderByAggregateInput = {
+    probability?: SortOrder
+  }
+
+  export type ScanBuahMaxOrderByAggregateInput = {
+    id?: SortOrder
+    predictedBuahName?: SortOrder
+    probability?: SortOrder
+    imageUrl?: SortOrder
+    scannedAt?: SortOrder
+    userId?: SortOrder
+    buahId?: SortOrder
+  }
+
+  export type ScanBuahMinOrderByAggregateInput = {
+    id?: SortOrder
+    predictedBuahName?: SortOrder
+    probability?: SortOrder
+    imageUrl?: SortOrder
+    scannedAt?: SortOrder
+    userId?: SortOrder
+    buahId?: SortOrder
+  }
+
+  export type ScanBuahSumOrderByAggregateInput = {
+    probability?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type ScanBuahCreateNestedManyWithoutUserInput = {
+    create?: XOR<ScanBuahCreateWithoutUserInput, ScanBuahUncheckedCreateWithoutUserInput> | ScanBuahCreateWithoutUserInput[] | ScanBuahUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ScanBuahCreateOrConnectWithoutUserInput | ScanBuahCreateOrConnectWithoutUserInput[]
+    createMany?: ScanBuahCreateManyUserInputEnvelope
+    connect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+  }
+
+  export type ScanBuahUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ScanBuahCreateWithoutUserInput, ScanBuahUncheckedCreateWithoutUserInput> | ScanBuahCreateWithoutUserInput[] | ScanBuahUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ScanBuahCreateOrConnectWithoutUserInput | ScanBuahCreateOrConnectWithoutUserInput[]
+    createMany?: ScanBuahCreateManyUserInputEnvelope
+    connect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -2230,6 +5184,114 @@ export namespace Prisma {
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type ScanBuahUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ScanBuahCreateWithoutUserInput, ScanBuahUncheckedCreateWithoutUserInput> | ScanBuahCreateWithoutUserInput[] | ScanBuahUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ScanBuahCreateOrConnectWithoutUserInput | ScanBuahCreateOrConnectWithoutUserInput[]
+    upsert?: ScanBuahUpsertWithWhereUniqueWithoutUserInput | ScanBuahUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ScanBuahCreateManyUserInputEnvelope
+    set?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    disconnect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    delete?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    connect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    update?: ScanBuahUpdateWithWhereUniqueWithoutUserInput | ScanBuahUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ScanBuahUpdateManyWithWhereWithoutUserInput | ScanBuahUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ScanBuahScalarWhereInput | ScanBuahScalarWhereInput[]
+  }
+
+  export type ScanBuahUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ScanBuahCreateWithoutUserInput, ScanBuahUncheckedCreateWithoutUserInput> | ScanBuahCreateWithoutUserInput[] | ScanBuahUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ScanBuahCreateOrConnectWithoutUserInput | ScanBuahCreateOrConnectWithoutUserInput[]
+    upsert?: ScanBuahUpsertWithWhereUniqueWithoutUserInput | ScanBuahUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ScanBuahCreateManyUserInputEnvelope
+    set?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    disconnect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    delete?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    connect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    update?: ScanBuahUpdateWithWhereUniqueWithoutUserInput | ScanBuahUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ScanBuahUpdateManyWithWhereWithoutUserInput | ScanBuahUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ScanBuahScalarWhereInput | ScanBuahScalarWhereInput[]
+  }
+
+  export type ScanBuahCreateNestedManyWithoutBuahInput = {
+    create?: XOR<ScanBuahCreateWithoutBuahInput, ScanBuahUncheckedCreateWithoutBuahInput> | ScanBuahCreateWithoutBuahInput[] | ScanBuahUncheckedCreateWithoutBuahInput[]
+    connectOrCreate?: ScanBuahCreateOrConnectWithoutBuahInput | ScanBuahCreateOrConnectWithoutBuahInput[]
+    createMany?: ScanBuahCreateManyBuahInputEnvelope
+    connect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+  }
+
+  export type ScanBuahUncheckedCreateNestedManyWithoutBuahInput = {
+    create?: XOR<ScanBuahCreateWithoutBuahInput, ScanBuahUncheckedCreateWithoutBuahInput> | ScanBuahCreateWithoutBuahInput[] | ScanBuahUncheckedCreateWithoutBuahInput[]
+    connectOrCreate?: ScanBuahCreateOrConnectWithoutBuahInput | ScanBuahCreateOrConnectWithoutBuahInput[]
+    createMany?: ScanBuahCreateManyBuahInputEnvelope
+    connect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+  }
+
+  export type ScanBuahUpdateManyWithoutBuahNestedInput = {
+    create?: XOR<ScanBuahCreateWithoutBuahInput, ScanBuahUncheckedCreateWithoutBuahInput> | ScanBuahCreateWithoutBuahInput[] | ScanBuahUncheckedCreateWithoutBuahInput[]
+    connectOrCreate?: ScanBuahCreateOrConnectWithoutBuahInput | ScanBuahCreateOrConnectWithoutBuahInput[]
+    upsert?: ScanBuahUpsertWithWhereUniqueWithoutBuahInput | ScanBuahUpsertWithWhereUniqueWithoutBuahInput[]
+    createMany?: ScanBuahCreateManyBuahInputEnvelope
+    set?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    disconnect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    delete?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    connect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    update?: ScanBuahUpdateWithWhereUniqueWithoutBuahInput | ScanBuahUpdateWithWhereUniqueWithoutBuahInput[]
+    updateMany?: ScanBuahUpdateManyWithWhereWithoutBuahInput | ScanBuahUpdateManyWithWhereWithoutBuahInput[]
+    deleteMany?: ScanBuahScalarWhereInput | ScanBuahScalarWhereInput[]
+  }
+
+  export type ScanBuahUncheckedUpdateManyWithoutBuahNestedInput = {
+    create?: XOR<ScanBuahCreateWithoutBuahInput, ScanBuahUncheckedCreateWithoutBuahInput> | ScanBuahCreateWithoutBuahInput[] | ScanBuahUncheckedCreateWithoutBuahInput[]
+    connectOrCreate?: ScanBuahCreateOrConnectWithoutBuahInput | ScanBuahCreateOrConnectWithoutBuahInput[]
+    upsert?: ScanBuahUpsertWithWhereUniqueWithoutBuahInput | ScanBuahUpsertWithWhereUniqueWithoutBuahInput[]
+    createMany?: ScanBuahCreateManyBuahInputEnvelope
+    set?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    disconnect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    delete?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    connect?: ScanBuahWhereUniqueInput | ScanBuahWhereUniqueInput[]
+    update?: ScanBuahUpdateWithWhereUniqueWithoutBuahInput | ScanBuahUpdateWithWhereUniqueWithoutBuahInput[]
+    updateMany?: ScanBuahUpdateManyWithWhereWithoutBuahInput | ScanBuahUpdateManyWithWhereWithoutBuahInput[]
+    deleteMany?: ScanBuahScalarWhereInput | ScanBuahScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutScanBuahInput = {
+    create?: XOR<UserCreateWithoutScanBuahInput, UserUncheckedCreateWithoutScanBuahInput>
+    connectOrCreate?: UserCreateOrConnectWithoutScanBuahInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BuahCreateNestedOneWithoutScanBuahInput = {
+    create?: XOR<BuahCreateWithoutScanBuahInput, BuahUncheckedCreateWithoutScanBuahInput>
+    connectOrCreate?: BuahCreateOrConnectWithoutScanBuahInput
+    connect?: BuahWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserUpdateOneRequiredWithoutScanBuahNestedInput = {
+    create?: XOR<UserCreateWithoutScanBuahInput, UserUncheckedCreateWithoutScanBuahInput>
+    connectOrCreate?: UserCreateOrConnectWithoutScanBuahInput
+    upsert?: UserUpsertWithoutScanBuahInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutScanBuahInput, UserUpdateWithoutScanBuahInput>, UserUncheckedUpdateWithoutScanBuahInput>
+  }
+
+  export type BuahUpdateOneWithoutScanBuahNestedInput = {
+    create?: XOR<BuahCreateWithoutScanBuahInput, BuahUncheckedCreateWithoutScanBuahInput>
+    connectOrCreate?: BuahCreateOrConnectWithoutScanBuahInput
+    upsert?: BuahUpsertWithoutScanBuahInput
+    disconnect?: BuahWhereInput | boolean
+    delete?: BuahWhereInput | boolean
+    connect?: BuahWhereUniqueInput
+    update?: XOR<XOR<BuahUpdateToOneWithWhereWithoutScanBuahInput, BuahUpdateWithoutScanBuahInput>, BuahUncheckedUpdateWithoutScanBuahInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -2339,6 +5401,306 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type ScanBuahCreateWithoutUserInput = {
+    id?: string
+    predictedBuahName: string
+    probability: number
+    imageUrl: string
+    scannedAt?: Date | string
+    buah?: BuahCreateNestedOneWithoutScanBuahInput
+  }
+
+  export type ScanBuahUncheckedCreateWithoutUserInput = {
+    id?: string
+    predictedBuahName: string
+    probability: number
+    imageUrl: string
+    scannedAt?: Date | string
+    buahId?: string | null
+  }
+
+  export type ScanBuahCreateOrConnectWithoutUserInput = {
+    where: ScanBuahWhereUniqueInput
+    create: XOR<ScanBuahCreateWithoutUserInput, ScanBuahUncheckedCreateWithoutUserInput>
+  }
+
+  export type ScanBuahCreateManyUserInputEnvelope = {
+    data: ScanBuahCreateManyUserInput | ScanBuahCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ScanBuahUpsertWithWhereUniqueWithoutUserInput = {
+    where: ScanBuahWhereUniqueInput
+    update: XOR<ScanBuahUpdateWithoutUserInput, ScanBuahUncheckedUpdateWithoutUserInput>
+    create: XOR<ScanBuahCreateWithoutUserInput, ScanBuahUncheckedCreateWithoutUserInput>
+  }
+
+  export type ScanBuahUpdateWithWhereUniqueWithoutUserInput = {
+    where: ScanBuahWhereUniqueInput
+    data: XOR<ScanBuahUpdateWithoutUserInput, ScanBuahUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ScanBuahUpdateManyWithWhereWithoutUserInput = {
+    where: ScanBuahScalarWhereInput
+    data: XOR<ScanBuahUpdateManyMutationInput, ScanBuahUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ScanBuahScalarWhereInput = {
+    AND?: ScanBuahScalarWhereInput | ScanBuahScalarWhereInput[]
+    OR?: ScanBuahScalarWhereInput[]
+    NOT?: ScanBuahScalarWhereInput | ScanBuahScalarWhereInput[]
+    id?: StringFilter<"ScanBuah"> | string
+    predictedBuahName?: StringFilter<"ScanBuah"> | string
+    probability?: FloatFilter<"ScanBuah"> | number
+    imageUrl?: StringFilter<"ScanBuah"> | string
+    scannedAt?: DateTimeFilter<"ScanBuah"> | Date | string
+    userId?: StringFilter<"ScanBuah"> | string
+    buahId?: StringNullableFilter<"ScanBuah"> | string | null
+  }
+
+  export type ScanBuahCreateWithoutBuahInput = {
+    id?: string
+    predictedBuahName: string
+    probability: number
+    imageUrl: string
+    scannedAt?: Date | string
+    user: UserCreateNestedOneWithoutScanBuahInput
+  }
+
+  export type ScanBuahUncheckedCreateWithoutBuahInput = {
+    id?: string
+    predictedBuahName: string
+    probability: number
+    imageUrl: string
+    scannedAt?: Date | string
+    userId: string
+  }
+
+  export type ScanBuahCreateOrConnectWithoutBuahInput = {
+    where: ScanBuahWhereUniqueInput
+    create: XOR<ScanBuahCreateWithoutBuahInput, ScanBuahUncheckedCreateWithoutBuahInput>
+  }
+
+  export type ScanBuahCreateManyBuahInputEnvelope = {
+    data: ScanBuahCreateManyBuahInput | ScanBuahCreateManyBuahInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ScanBuahUpsertWithWhereUniqueWithoutBuahInput = {
+    where: ScanBuahWhereUniqueInput
+    update: XOR<ScanBuahUpdateWithoutBuahInput, ScanBuahUncheckedUpdateWithoutBuahInput>
+    create: XOR<ScanBuahCreateWithoutBuahInput, ScanBuahUncheckedCreateWithoutBuahInput>
+  }
+
+  export type ScanBuahUpdateWithWhereUniqueWithoutBuahInput = {
+    where: ScanBuahWhereUniqueInput
+    data: XOR<ScanBuahUpdateWithoutBuahInput, ScanBuahUncheckedUpdateWithoutBuahInput>
+  }
+
+  export type ScanBuahUpdateManyWithWhereWithoutBuahInput = {
+    where: ScanBuahScalarWhereInput
+    data: XOR<ScanBuahUpdateManyMutationInput, ScanBuahUncheckedUpdateManyWithoutBuahInput>
+  }
+
+  export type UserCreateWithoutScanBuahInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserUncheckedCreateWithoutScanBuahInput = {
+    id?: string
+    email: string
+    passwordHash: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserCreateOrConnectWithoutScanBuahInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutScanBuahInput, UserUncheckedCreateWithoutScanBuahInput>
+  }
+
+  export type BuahCreateWithoutScanBuahInput = {
+    id?: string
+    namaBuah: string
+    manfaat: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BuahUncheckedCreateWithoutScanBuahInput = {
+    id?: string
+    namaBuah: string
+    manfaat: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BuahCreateOrConnectWithoutScanBuahInput = {
+    where: BuahWhereUniqueInput
+    create: XOR<BuahCreateWithoutScanBuahInput, BuahUncheckedCreateWithoutScanBuahInput>
+  }
+
+  export type UserUpsertWithoutScanBuahInput = {
+    update: XOR<UserUpdateWithoutScanBuahInput, UserUncheckedUpdateWithoutScanBuahInput>
+    create: XOR<UserCreateWithoutScanBuahInput, UserUncheckedCreateWithoutScanBuahInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutScanBuahInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutScanBuahInput, UserUncheckedUpdateWithoutScanBuahInput>
+  }
+
+  export type UserUpdateWithoutScanBuahInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUncheckedUpdateWithoutScanBuahInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BuahUpsertWithoutScanBuahInput = {
+    update: XOR<BuahUpdateWithoutScanBuahInput, BuahUncheckedUpdateWithoutScanBuahInput>
+    create: XOR<BuahCreateWithoutScanBuahInput, BuahUncheckedCreateWithoutScanBuahInput>
+    where?: BuahWhereInput
+  }
+
+  export type BuahUpdateToOneWithWhereWithoutScanBuahInput = {
+    where?: BuahWhereInput
+    data: XOR<BuahUpdateWithoutScanBuahInput, BuahUncheckedUpdateWithoutScanBuahInput>
+  }
+
+  export type BuahUpdateWithoutScanBuahInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namaBuah?: StringFieldUpdateOperationsInput | string
+    manfaat?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BuahUncheckedUpdateWithoutScanBuahInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    namaBuah?: StringFieldUpdateOperationsInput | string
+    manfaat?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScanBuahCreateManyUserInput = {
+    id?: string
+    predictedBuahName: string
+    probability: number
+    imageUrl: string
+    scannedAt?: Date | string
+    buahId?: string | null
+  }
+
+  export type ScanBuahUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    predictedBuahName?: StringFieldUpdateOperationsInput | string
+    probability?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    buah?: BuahUpdateOneWithoutScanBuahNestedInput
+  }
+
+  export type ScanBuahUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    predictedBuahName?: StringFieldUpdateOperationsInput | string
+    probability?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    buahId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ScanBuahUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    predictedBuahName?: StringFieldUpdateOperationsInput | string
+    probability?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    buahId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ScanBuahCreateManyBuahInput = {
+    id?: string
+    predictedBuahName: string
+    probability: number
+    imageUrl: string
+    scannedAt?: Date | string
+    userId: string
+  }
+
+  export type ScanBuahUpdateWithoutBuahInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    predictedBuahName?: StringFieldUpdateOperationsInput | string
+    probability?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutScanBuahNestedInput
+  }
+
+  export type ScanBuahUncheckedUpdateWithoutBuahInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    predictedBuahName?: StringFieldUpdateOperationsInput | string
+    probability?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ScanBuahUncheckedUpdateManyWithoutBuahInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    predictedBuahName?: StringFieldUpdateOperationsInput | string
+    probability?: FloatFieldUpdateOperationsInput | number
+    imageUrl?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
 

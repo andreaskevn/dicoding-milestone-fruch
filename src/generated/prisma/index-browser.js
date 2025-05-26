@@ -129,6 +129,24 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.BuahScalarFieldEnum = {
+  id: 'id',
+  namaBuah: 'namaBuah',
+  manfaat: 'manfaat',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ScanBuahScalarFieldEnum = {
+  id: 'id',
+  predictedBuahName: 'predictedBuahName',
+  probability: 'probability',
+  imageUrl: 'imageUrl',
+  scannedAt: 'scannedAt',
+  userId: 'userId',
+  buahId: 'buahId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -146,7 +164,9 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  Buah: 'Buah',
+  ScanBuah: 'ScanBuah'
 };
 
 /**
