@@ -1,4 +1,3 @@
-// src/controllers/classifyAndFetchFruitController.ts
 "use client";
 
 import { useState, useRef } from "react";
@@ -8,8 +7,6 @@ import type {
   FruitData,
   SaveScanRequestBody,
 } from "@/lib/definition";
-// Impor useAuth jika Anda ingin mengambil user/token langsung di sini,
-// namun saat ini kita akan menerimanya sebagai parameter di handleSaveScan.
 // import { useAuth } from '@/contexts/AuthContext';
 
 export function useClassifyAndFetchFruitController() {
@@ -37,7 +34,6 @@ export function useClassifyAndFetchFruitController() {
     setTopPrediction(null);
     setFruitDetails(null);
     setError(null);
-    // Pastikan state untuk save scan juga direset
     setSaveScanError(null);
     setSaveScanSuccess(null);
   };
@@ -62,12 +58,10 @@ export function useClassifyAndFetchFruitController() {
       return;
     }
 
-    // Reset pesan save sebelum proses klasifikasi baru
     setSaveScanError(null);
     setSaveScanSuccess(null);
     setIsClassifying(true);
     setIsFetchingDetails(false);
-    // Reset state utama, tapi jangan reset imagePreview di sini jika sudah di-set oleh handleImageUpload
     resetState(false);
 
     try {
@@ -105,12 +99,11 @@ export function useClassifyAndFetchFruitController() {
                   errorResponseMessage = errorData.message;
                 }
               } catch (e) {
-                const textError = await res.text(); // Baca sebagai teks jika bukan JSON
+                const textError = await res.text();
                 console.error(
                   "Respons error bukan JSON:",
                   textError.substring(0, 200)
                 );
-                // errorResponseMessage tetap seperti di atas atau gunakan textError jika relevan
               }
               throw new Error(errorResponseMessage);
             }
@@ -156,12 +149,11 @@ export function useClassifyAndFetchFruitController() {
     setSaveScanError(null);
     setSaveScanSuccess(null);
 
-    // Payload tidak lagi mengirim userId, karena akan diambil dari token di backend
     const payload: Omit<SaveScanRequestBody, "userId"> = {
-      buahId: fruitDetails?.id, // Ambil id dari fruitDetails (ini adalah buahId yang cocok dari DB)
+      buahId: fruitDetails?.id,
       predictedBuahName: topPrediction.className,
       probability: topPrediction.probability,
-      imageUrl: imagePreview, // Menggunakan data URL dari imagePreview
+      imageUrl: imagePreview,
     };
 
     try {
@@ -170,13 +162,13 @@ export function useClassifyAndFetchFruitController() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${currentAuthToken}`, // Sertakan token di sini!
+          Authorization: `Bearer ${currentAuthToken}`,
         },
         body: JSON.stringify(payload),
       });
       console.log("Respons simpan scan:", response.status, response.statusText);
 
-      const data = await response.json(); // Selalu coba parse JSON untuk mendapatkan pesan
+      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message || "Gagal menyimpan hasil scan.");

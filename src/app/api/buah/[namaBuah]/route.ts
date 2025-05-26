@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma"; // Pastikan path ke instance Prisma Anda benar
-import type { FruitData } from "@/lib/definition"; // Impor tipe FruitData
+import prisma from "@/lib/prisma";
+import type { FruitData } from "@/lib/definition";
 
 interface Params {
   namaBuah: string;

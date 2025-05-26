@@ -1,4 +1,3 @@
-// src/controllers/registerController.ts
 "use client";
 
 import { useState } from "react";

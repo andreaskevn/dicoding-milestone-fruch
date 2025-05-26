@@ -1,8 +1,6 @@
 "use client";
-
-// Path impor disesuaikan dengan nama file controller yang benar
 import { useClassifyAndFetchFruitController } from "@/controllers/classifyController";
-import { useAuth } from '@/context/authContext'; // Pastikan path ini benar
+import { useAuth } from '@/context/authContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -15,16 +13,16 @@ export default function ClassifyPage() {
         fruitDetails,
         isClassifying,
         isFetchingDetails,
-        isSavingScan,     // State baru dari controller
+        isSavingScan,   
         error,
-        saveScanError,    // Error baru
-        saveScanSuccess,  // Pesan sukses baru
+        saveScanError,
+        saveScanSuccess,
         handleImageUpload,
         processImageAndGetDetails,
-        handleSaveScan,   // Fungsi baru dari controller
+        handleSaveScan,
     } = useClassifyAndFetchFruitController();
 
-    const { isAuthenticated, isLoadingAuth, user, token: authToken } = useAuth(); // Ambil user dan token
+    const { isAuthenticated, isLoadingAuth, user, token: authToken } = useAuth(); 
     const router = useRouter();
 
     useEffect(() => {
@@ -148,10 +146,9 @@ export default function ClassifyPage() {
                                 Informasi ditambahkan: {new Date(fruitDetails.createdAt).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
                             </p>
                         )}
-                        {/* Tombol Simpan Hasil Scan */}
-                        {isAuthenticated && user && ( // Hanya tampilkan jika user login
+                        {isAuthenticated && user && ( 
                             <button
-                                onClick={() => handleSaveScan(user.id, authToken)} // Kirim user.id dan token dari AuthContext
+                                onClick={() => handleSaveScan(user.id, authToken)} 
                                 disabled={isSavingScan}
                                 className="mt-6 w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg 
                            text-base font-medium text-white bg-blue-600 hover:bg-blue-700 
