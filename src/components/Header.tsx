@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -22,7 +22,10 @@ export default function Header() {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsProfileDropdownOpen(false);
       }
     };
@@ -77,7 +80,7 @@ export default function Header() {
           >
             Deteksi Buah
           </Link>
-          
+
           {isAuthenticated && (
             <Link
               href="/history"
@@ -86,7 +89,7 @@ export default function Header() {
               Riwayat Scan
             </Link>
           )}
-          
+
           {!isAuthenticated ? (
             <>
               <Link
@@ -104,7 +107,7 @@ export default function Header() {
             </>
           ) : (
             <div className="relative" ref={dropdownRef}>
-              <button 
+              <button
                 onClick={toggleProfileDropdown}
                 className="flex items-center gap-2 bg-white/50 hover:bg-white/80 px-3 py-2 rounded-full transition-colors"
               >
@@ -116,39 +119,64 @@ export default function Header() {
                 <span className="text-emerald-800 font-medium">
                   {user?.name || user?.email}
                 </span>
-                <svg 
-                  className={`w-4 h-4 text-emerald-700 transition-transform ${isProfileDropdownOpen ? 'rotate-180' : ''}`} 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  className={`w-4 h-4 text-emerald-700 transition-transform ${isProfileDropdownOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </button>
-              
+
               {/* Profile Dropdown */}
               {isProfileDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border border-gray-100">
-                  <Link 
-                    href="/profile" 
+                  <Link
+                    href="/profile"
                     className="block px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
                     onClick={() => setIsProfileDropdownOpen(false)}
                   >
                     <div className="flex items-center">
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      <svg
+                        className="w-5 h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
                       </svg>
                       Lihat Profil
                     </div>
                   </Link>
                   <hr className="my-1 border-gray-200" />
-                  <button 
+                  <button
                     onClick={handleLogout}
                     className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-700"
                   >
                     <div className="flex items-center">
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      <svg
+                        className="w-5 h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                        />
                       </svg>
                       Keluar
                     </div>
@@ -228,6 +256,22 @@ export default function Header() {
             </button>
           </div>
           <nav className="flex flex-col gap-4">
+            {!isAuthenticated ? (
+              <></>
+            ) : (
+              <>
+                <div className="flex items-center gap-2 py-3 px-4">
+                  <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-400 rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">
+                      {user?.name?.[0] || user?.email?.[0] || "U"}
+                    </span>
+                  </div>
+                  <span className="text-emerald-800 font-medium">
+                    {user?.name || user?.email}
+                  </span>
+                </div>
+              </>
+            )}
             <Link
               href="/"
               className="text-emerald-800 font-medium hover:text-emerald-600 transition-colors py-3 px-4 hover:bg-emerald-50 rounded-lg"
@@ -242,7 +286,7 @@ export default function Header() {
             >
               Deteksi Buah
             </Link>
-            
+
             {isAuthenticated && (
               <Link
                 href="/history"
@@ -252,7 +296,7 @@ export default function Header() {
                 Riwayat Scan
               </Link>
             )}
-            
+
             {!isAuthenticated ? (
               <>
                 <Link
@@ -272,23 +316,23 @@ export default function Header() {
               </>
             ) : (
               <>
-                <div className="flex items-center gap-2 py-3 px-4">
-                  <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-400 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">
-                      {user?.name?.[0] || user?.email?.[0] || "U"}
-                    </span>
-                  </div>
-                  <span className="text-emerald-800 font-medium">
-                    {user?.name || user?.email}
-                  </span>
-                </div>
                 <Link
                   href="/profile"
                   className="text-emerald-800 font-medium hover:text-emerald-600 transition-colors py-3 px-4 hover:bg-emerald-50 rounded-lg flex items-center"
                   onClick={toggleMenu}
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
                   </svg>
                   Lihat Profil
                 </Link>
@@ -299,8 +343,18 @@ export default function Header() {
                   }}
                   className="text-red-600 font-medium hover:text-red-700 transition-colors py-3 px-4 hover:bg-red-50 rounded-lg text-left flex items-center w-full"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
                   </svg>
                   Keluar
                 </button>
