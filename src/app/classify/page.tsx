@@ -1,5 +1,5 @@
 "use client";
-import { useClassifyAndFetchFruitController } from "@/controllers/classifyController"
+import { useClassifyAndFetchFruitController } from "@/controllers/classifyController";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -274,7 +274,9 @@ export default function ClassifyPage() {
 
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
                   <h3 className="text-2xl font-bold mb-2">
-                    🍎 {topPrediction.className}
+                    {topPrediction.className === "Pisang" && "🍌"}
+                    {topPrediction.className === "Apel" && "🍎"}{" "}
+                    {topPrediction.className}
                   </h3>
                   <div className="flex items-center">
                     <span className="text-lg mr-3">Tingkat Kepercayaan:</span>
@@ -379,7 +381,7 @@ export default function ClassifyPage() {
                               />
                             </svg>
                             <span className="text-lg">
-                              💾 Simpan Hasil Scan
+                              Simpan Hasil Scan
                             </span>
                           </>
                         )}
@@ -528,7 +530,7 @@ export default function ClassifyPage() {
             &copy; {new Date().getFullYear()} Powered by Advanced AI Technology
           </p>
           <p className="text-xs text-gray-400 mt-1">
-            Hak Cipta Dilindungi - Made with ❤️
+            Hak Cipta Dilindungi
           </p>
         </div>
       </footer>
