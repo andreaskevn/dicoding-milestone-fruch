@@ -112,16 +112,26 @@ export default function Header() {
                   onClick={toggleProfileDropdown}
                   className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 px-3 py-2 rounded-full transition-colors"
                 >
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-                    <span className="text-emerald-600 font-bold text-sm">
-                      {user?.name?.[0] || user?.email?.[0] || "U"}
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-start">
-                    <span className="text-white font-bold">{user?.name}</span>
-                    <span className="text-white font-medium text-xs italic -mt-1.5">
-                      {user?.email}
-                    </span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                      <span className="text-emerald-600 font-bold text-sm">
+                        {user?.name?.[0] || user?.email?.[0] || "U"}
+                      </span>
+                    </div>
+                    <div className="min-w-0 flex flex-col items-start">
+                      <p
+                        className="text-white text-sm font-semibold truncate max-w-[160px]"
+                        title={user?.name}
+                      >
+                        {user?.name}
+                      </p>
+                      <p
+                        className="text-white text-xs italic truncate max-w-[160px]"
+                        title={user?.email}
+                      >
+                        {user?.email}
+                      </p>
+                    </div>
                   </div>
                   <svg
                     className={`w-4 h-4 text-white transition-transform ${isProfileDropdownOpen ? "rotate-180" : ""}`}
@@ -142,7 +152,7 @@ export default function Header() {
                 {isProfileDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border border-gray-100 animate-fadeInDown animate-fadeInUp">
                     <Link
-                      href="/profile"
+                      href="/users"
                       className="block px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 ease-in-out transform hover:translate-x-1"
                       onClick={() => setIsProfileDropdownOpen(false)}
                     >
@@ -311,14 +321,16 @@ export default function Header() {
             ) : (
               <>
                 <div className="flex items-center gap-2 py-3 px-4 bg-emerald-600 rounded-xl">
-                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                  <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shrink-0">
                     <span className="text-emerald-600 font-bold text-sm">
                       {user?.name?.[0] || user?.email?.[0] || "U"}
                     </span>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-white font-bold">{user?.name}</span>
-                    <span className="text-white font-medium text-xs italic -mt-1.5">
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-white font-bold text-sm truncate max-w-[160px] sm:max-w-xs md:max-w-sm">
+                      {user?.name}
+                    </span>
+                    <span className="text-white font-medium text-xs italic -mt-0.5 truncate max-w-[160px] sm:max-w-xs md:max-w-sm">
                       {user?.email}
                     </span>
                   </div>
@@ -370,7 +382,7 @@ export default function Header() {
             ) : (
               <>
                 <Link
-                  href="/profile"
+                  href="/users"
                   className="text-emerald-800 font-medium hover:text-emerald-600 transition-colors py-3 px-4 hover:bg-emerald-50 rounded-lg flex items-center"
                   onClick={toggleMenu}
                 >
