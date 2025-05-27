@@ -124,12 +124,16 @@ export function useProfileController() {
         },
         body: JSON.stringify(payload),
       });
-      const data: UpdateProfileResponse = await response.json();
+
+      const text = await response.text(); // Ambil sebagai text dulu
+      const data = text ? JSON.parse(text) : {}; // Parse manual agar tidak crash kalau kosong
+
       if (!response.ok) {
         throw new Error(
-          data.error || data.message || "Gagal memperbarui profil."
+          data.message || data.error || "Gagal memperbarui profil."
         );
       }
+
       setUpdateInfoSuccess(data.message);
       if (data.user) {
         setProfileData(data.user);
@@ -140,7 +144,7 @@ export function useProfileController() {
         }
       }
     } catch (err: any) {
-      setUpdateInfoError(err.message);
+      setUpdateInfoError(err.message || "Terjadi kesalahan.");
     } finally {
       setIsUpdatingInfo(false);
     }
@@ -188,9 +192,7 @@ export function useProfileController() {
       });
       const data: UpdateProfileResponse = await response.json();
       if (!response.ok) {
-        throw new Error(
-          data.error || data.message || "Gagal mengganti password."
-        );
+        throw new Error(data.message || "Gagal mengganti password.");
       }
       setChangePasswordSuccess(data.message);
       setCurrentPassword("");
@@ -215,13 +217,6 @@ export function useProfileController() {
       return;
     }
 
-    const confirmed = confirm(
-      "Apakah Anda benar-benar yakin ingin menghapus akun Anda? Tindakan ini tidak dapat diurungkan dan semua data terkait (seperti riwayat scan) akan hilang."
-    );
-    if (!confirmed) {
-      return;
-    }
-
     setIsDeletingAccount(true);
     setDeleteAccountError(null);
     setDeleteAccountSuccess(null);
@@ -239,7 +234,7 @@ export function useProfileController() {
       const data: { message: string; error?: string } = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || data.message || "Gagal menghapus akun.");
+        throw new Error(data.message || "Gagal menghapus akun.");
       }
       setDeleteAccountSuccess(
         data.message + " Anda akan segera logout dan diarahkan."
@@ -249,17 +244,16 @@ export function useProfileController() {
         logout();
         router.push("/");
       }, 3000);
+
+      return { success: true, message: data.message };
     } catch (err: any) {
-      if (err instanceof SyntaxError) {
-        setDeleteAccountError(
-          "Terjadi kesalahan respons dari server. Silakan coba lagi."
-        );
-      } else {
-        setDeleteAccountError(
-          err.message || "Terjadi kesalahan saat menghapus akun."
-        );
-      }
-      console.error("Error saat menghapus akun:", err);
+      const errorMsg =
+        err instanceof SyntaxError
+          ? "Terjadi kesalahan respons dari server. Silakan coba lagi."
+          : err.message || "Terjadi kesalahan saat menghapus akun.";
+
+      setDeleteAccountError(errorMsg);
+      return { error: errorMsg };
     } finally {
       setIsDeletingAccount(false);
     }
