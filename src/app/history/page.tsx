@@ -102,7 +102,7 @@ export default function HistoryPage() {
       setIsLoading(true);
       setError(null);
 
-      const response = await fetch("/api/buah", {
+      const response = await fetch("/api/scan", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
