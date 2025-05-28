@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/authContext";
 import RootLayoutClient from "./RootLayoutClient";
 
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
