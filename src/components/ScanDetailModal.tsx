@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Swal from "sweetalert2";
 
 interface ScanResult {
   id: string;
@@ -122,8 +123,6 @@ export default function ScanDetailModal({
       }
 
       if (!token) {
-        // If no token found, try without authorization header
-        // Some APIs might handle auth through cookies or other means
         const response = await fetch(`/api/scan/${scan.id}`, {
           method: 'DELETE',
           headers: {
@@ -168,18 +167,40 @@ export default function ScanDetailModal({
         }
       }
 
+      // Success alert
+      await Swal.fire({
+        title: 'Berhasil!',
+        text: 'Riwayat scan berhasil dihapus',
+        icon: 'success',
+        confirmButtonColor: '#10b981',
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'rounded-xl',
+          title: 'text-lg font-bold',
+          confirmButton: 'rounded-lg px-6 py-2 font-medium'
+        }
+      });
+
       // Panggil callback untuk refresh data dan tutup modal
       if (onDelete) {
         onDelete(scan.id);
       }
       onClose();
 
-      // Tampilkan notifikasi sukses (opsional)
-      alert('Riwayat scan berhasil dihapus');
-
     } catch (err) {
       console.error('Error deleting scan:', err);
-      alert(err instanceof Error ? err.message : 'Gagal menghapus riwayat scan');
+      await Swal.fire({
+        title: 'Gagal!',
+        text: err instanceof Error ? err.message : 'Gagal menghapus riwayat scan',
+        icon: 'error',
+        confirmButtonColor: '#ef4444',
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'rounded-xl',
+          title: 'text-lg font-bold',
+          confirmButton: 'rounded-lg px-6 py-2 font-medium'
+        }
+      });
     } finally {
       setIsDeleting(false);
       setShowDeleteConfirm(false);
