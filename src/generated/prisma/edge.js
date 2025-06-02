@@ -151,7 +151,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\User\\Documents\\Stupen\\Capstone\\dicoding-milestone-fruch\\src\\generated\\prisma",
+      "value": "/root/dicoding/dicoding-milestone-fruch/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -160,12 +160,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "debian-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\User\\Documents\\Stupen\\Capstone\\dicoding-milestone-fruch\\prisma\\schema.prisma",
+    "sourceFilePath": "/root/dicoding/dicoding-milestone-fruch/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -179,6 +179,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
