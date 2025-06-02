@@ -52,7 +52,7 @@ export default function ClassifyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-100 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-100 relative">
       {/* Floating Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-green-300/30 to-emerald-300/30 rounded-full blur-3xl animate-pulse"></div>
@@ -93,7 +93,7 @@ export default function ClassifyPage() {
           <div className="bg-white/80 backdrop-blur-xl p-8 sm:p-10 rounded-3xl shadow-2xl border border-white/50 hover:shadow-3xl transition-all duration-500 mb-8">
             {/* Upload Section */}
             <div className="mb-8">
-              <label className="block text-lg font-semibold text-gray-700 mb-4 flex items-center">
+              <label className="block text-lg font-semibold text-gray-700 mb-4 items-center">
                 <svg
                   className="w-6 h-6 mr-2 text-green-500"
                   fill="none"
@@ -354,16 +354,58 @@ export default function ClassifyPage() {
                   {/* Save Button with enhanced styling */}
                   {isAuthenticated && user && (
                     <button
-                      onClick={() => handleSaveScan(user.id, authToken)}
+                      onClick={() => {
+                        if (saveScanSuccess) {
+                          // Navigate to history page when save is successful
+                          // Replace '/history' with your actual history route
+                          window.location.href = "/history";
+                          // Or if using React Router: navigate('/history');
+                        } else {
+                          handleSaveScan(user.id, authToken);
+                        }
+                      }}
                       disabled={isSavingScan}
-                      className="group relative w-full overflow-hidden bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                      className={`group relative w-full overflow-hidden ${
+                        saveScanSuccess
+                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                          : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                      } text-white font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-102 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none`}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-r ${
+                          saveScanSuccess
+                            ? "from-blue-400 to-indigo-400"
+                            : "from-green-400 to-emerald-400"
+                        } opacity-0 group-hover:opacity-20 transition-opacity duration-300`}
+                      ></div>
                       <div className="relative flex items-center justify-center">
                         {isSavingScan ? (
                           <>
                             <div className="animate-spin mr-3 h-6 w-6 border-2 border-white border-t-transparent rounded-full"></div>
                             <span className="text-lg">Menyimpan hasil...</span>
+                          </>
+                        ) : saveScanSuccess ? (
+                          <>
+                            <svg
+                              className="w-6 h-6 mr-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                              />
+                            </svg>
+                            <span className="text-lg">Lihat Hasil Scan</span>
                           </>
                         ) : (
                           <>
@@ -380,15 +422,12 @@ export default function ClassifyPage() {
                                 d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12"
                               />
                             </svg>
-                            <span className="text-lg">
-                              Simpan Hasil Scan
-                            </span>
+                            <span className="text-lg">Simpan Hasil Scan</span>
                           </>
                         )}
                       </div>
                     </button>
                   )}
-
                   {/* Save Status Messages */}
                   {saveScanSuccess && (
                     <div className="mt-4 p-4 bg-green-100 border border-green-300 rounded-xl">
@@ -529,9 +568,7 @@ export default function ClassifyPage() {
           <p className="text-sm text-gray-500">
             &copy; {new Date().getFullYear()} Powered by Advanced AI Technology
           </p>
-          <p className="text-xs text-gray-400 mt-1">
-            Hak Cipta Dilindungi
-          </p>
+          <p className="text-xs text-gray-400 mt-1">Hak Cipta Dilindungi</p>
         </div>
       </footer>
     </div>
