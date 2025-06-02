@@ -187,6 +187,10 @@ export default function ScanDetailModal({
       }
       onClose();
 
+      if (typeof window !== 'undefined') {
+        window.location.reload();
+      }
+
     } catch (err) {
       console.error('Error deleting scan:', err);
       await Swal.fire({
