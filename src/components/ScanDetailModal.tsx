@@ -24,16 +24,20 @@ interface FruitData {
 interface ScanDetailModalProps {
   scan: ScanResult | null;
   onClose: () => void;
+  onDelete?: (scanId: string) => void;
 }
 
 export default function ScanDetailModal({
   scan,
   onClose,
+  onDelete
 }: ScanDetailModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [fruitDetails, setFruitDetails] = useState<FruitData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     // Close modal when clicking outside
@@ -92,6 +96,93 @@ export default function ScanDetailModal({
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // if (!scan) return null;
+
+  const handleDelete = async () => {
+    if (!scan) return;
+
+    try {
+      setIsDeleting(true);
+
+      // Try multiple possible token storage keys
+      let token = localStorage.getItem('token') ||
+        localStorage.getItem('authToken') ||
+        localStorage.getItem('accessToken') ||
+        localStorage.getItem('jwt');
+
+      // Also try sessionStorage as fallback
+      if (!token) {
+        token = sessionStorage.getItem('token') ||
+          sessionStorage.getItem('authToken') ||
+          sessionStorage.getItem('accessToken') ||
+          sessionStorage.getItem('jwt');
+      }
+
+      if (!token) {
+        // If no token found, try without authorization header
+        // Some APIs might handle auth through cookies or other means
+        const response = await fetch(`/api/scan/${scan.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error('Sesi Anda telah berakhir. Silakan login kembali.');
+          }
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || 'Gagal menghapus riwayat scan');
+        }
+      } else {
+        // Try with authorization header
+        const response = await fetch(`/api/scan/${scan.id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            // Token might be expired, try without it
+            const retryResponse = await fetch(`/api/scan/${scan.id}`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+
+            if (!retryResponse.ok) {
+              throw new Error('Sesi Anda telah berakhir. Silakan login kembali.');
+            }
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Gagal menghapus riwayat scan');
+          }
+        }
+      }
+
+      // Panggil callback untuk refresh data dan tutup modal
+      if (onDelete) {
+        onDelete(scan.id);
+      }
+      onClose();
+
+      // Tampilkan notifikasi sukses (opsional)
+      alert('Riwayat scan berhasil dihapus');
+
+    } catch (err) {
+      console.error('Error deleting scan:', err);
+      alert(err instanceof Error ? err.message : 'Gagal menghapus riwayat scan');
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
     }
   };
 
@@ -303,10 +394,88 @@ export default function ScanDetailModal({
             </div>
           </div>
         </div>
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-white rounded-xl p-6 mx-4 max-w-md w-full">
+              <div className="flex items-center mb-4">
+                <svg
+                  className="w-6 h-6 text-red-500 mr-3"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                  />
+                </svg>
+                <h3 className="text-lg font-bold text-gray-800">Konfirmasi Hapus</h3>
+              </div>
+              <p className="text-gray-600 mb-6">
+                Apakah Anda yakin ingin menghapus riwayat scan untuk "{scan.predictedBuahName}"?
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-colors font-medium"
+                  disabled={isDeleting}
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                >
+                  {isDeleting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                      Menghapus...
+                    </>
+                  ) : (
+                    'Ya, Hapus'
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Footer - Mobile sticky */}
         <div className="bg-gray-50 p-4 sm:p-6 border-t border-gray-100 sticky bottom-0 sm:static">
-          <div className="flex justify-end">
+          <div className="flex justify-end space-x-3">
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              disabled={isDeleting}
+              className="px-6 py-3 sm:px-4 sm:py-2 bg-red-200 hover:bg-red-300 text-red-800 rounded-lg transition-colors text-sm sm:text-base font-medium w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              {isDeleting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-red-800 border-t-transparent rounded-full animate-spin mr-2"></div>
+                  Menghapus...
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="w-4 h-4 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                  Hapus
+                </>
+              )}
+            </button>
             <button
               onClick={onClose}
               className="px-6 py-3 sm:px-4 sm:py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-colors text-sm sm:text-base font-medium w-full sm:w-auto"
