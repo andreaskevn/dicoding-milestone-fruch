@@ -8,7 +8,14 @@ export async function POST(request: Request): Promise<Response> {
 
     if (!first_name || !last_name || !email || !password) {
       return NextResponse.json(
-        { message: "All fields are required" },
+        { message: "Semua field harus terisi!" },
+        { status: 400 }
+      );
+    }
+
+    if(password.length < 6) {
+      return NextResponse.json(
+        { message: "Password minimal harus 6 karakter" },
         { status: 400 }
       );
     }
@@ -16,7 +23,7 @@ export async function POST(request: Request): Promise<Response> {
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return NextResponse.json(
-        { message: "User already exists" },
+        { message: "Pengguna sudah ada" },
         { status: 409 }
       );
     }

@@ -5,9 +5,22 @@ import { classifyImage } from "@/lib/imageClassifier";
 import type {
   PredictionResult,
   FruitData,
-  SaveScanRequestBody,
+  // SaveScanRequestBody, // Kita tidak akan membuat payload JSON ini lagi untuk sisi klien
+  SaveScanApiResponse, // Impor tipe untuk respons API
 } from "@/lib/definition";
-// import { useAuth } from '@/contexts/AuthContext';
+// import { useAuth } from '@/contexts/AuthContext'; // Sesuaikan jika Anda menggunakan ini
+
+// Fungsi helper untuk mengubah data URI menjadi Blob
+async function dataUriToBlob(dataURI: string): Promise<Blob> {
+  const byteString = atob(dataURI.split(",")[1]);
+  const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeString });
+}
 
 export function useClassifyAndFetchFruitController() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -44,7 +57,7 @@ export function useClassifyAndFetchFruitController() {
       resetState(true);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+        setImagePreview(reader.result as string); // imagePreview adalah data URI base64
       };
       reader.readAsDataURL(file);
     } else {
@@ -59,10 +72,10 @@ export function useClassifyAndFetchFruitController() {
     }
 
     setSaveScanError(null);
-    setSaveScanSuccess(null);
+    setSaveScanSuccess(null); 
     setIsClassifying(true);
     setIsFetchingDetails(false);
-    resetState(false);
+    resetState(false); // Jangan reset imagePreview di sini
 
     try {
       const predictions = await classifyImage(imageRef.current);
@@ -80,17 +93,7 @@ export function useClassifyAndFetchFruitController() {
             const encodedFruitName = encodeURIComponent(
               highestPrediction.className
             );
-            console.log(
-              "Mencoba fetch ke URL:",
-              `/api/buah/${encodedFruitName}`
-            );
             const res = await fetch(`/api/buah/${encodedFruitName}`);
-            console.log(
-              `Respons fetch untuk ${encodedFruitName}:`,
-              res.status,
-              res.statusText
-            );
-
             if (!res.ok) {
               let errorResponseMessage = `Buah "${highestPrediction.className}" tidak ditemukan atau terjadi kesalahan server (Status: ${res.status}).`;
               try {
@@ -99,11 +102,7 @@ export function useClassifyAndFetchFruitController() {
                   errorResponseMessage = errorData.message;
                 }
               } catch (e) {
-                const textError = await res.text();
-                console.error(
-                  "Respons error bukan JSON:",
-                  textError.substring(0, 200)
-                );
+                // Tangani jika respons error bukan JSON
               }
               throw new Error(errorResponseMessage);
             }
@@ -131,10 +130,12 @@ export function useClassifyAndFetchFruitController() {
   };
 
   const handleSaveScan = async (
+    // currentUserId tidak perlu dikirim dalam FormData, karena server mengambilnya dari token
     currentUserId: string | undefined,
-    currentAuthToken: string | null
+    currentAuthToken: string | null // Hanya token yang dibutuhkan untuk header
   ) => {
-    if (!currentUserId || !currentAuthToken) {
+    // Validasi awal untuk currentAuthToken dan data yang akan disimpan
+    if (!currentAuthToken || !currentUserId) {
       setSaveScanError(
         "Pengguna tidak terautentikasi. Silakan login untuk menyimpan."
       );
@@ -149,34 +150,49 @@ export function useClassifyAndFetchFruitController() {
     setSaveScanError(null);
     setSaveScanSuccess(null);
 
-    const payload: Omit<SaveScanRequestBody, "userId"> = {
-      buahId: fruitDetails?.id,
-      predictedBuahName: topPrediction.className,
-      probability: topPrediction.probability,
-      imageUrl: imagePreview,
-    };
-
     try {
-      console.log("Mengirim payload untuk simpan scan:", payload);
-      const response = await fetch("/api/buah", {
+      // 1. Ubah imagePreview (data URI) menjadi Blob
+      const imageBlob = await dataUriToBlob(imagePreview);
+      // Buat nama file unik, server mungkin akan membuat nama baru lagi
+      const fileExtension = imageBlob.type.split("/")[1] || "png";
+      const uniqueFileName = `scan_${Date.now()}.${fileExtension}`;
+
+      // 2. Buat objek FormData
+      const formData = new FormData();
+      formData.append("imageFile", imageBlob, uniqueFileName); // 'imageFile' harus cocok dengan nama field di backend
+
+      // Tambahkan field lain yang dibutuhkan oleh backend
+      if (fruitDetails?.id) {
+        formData.append("buahId", fruitDetails.id);
+      }
+      formData.append("predictedBuahName", topPrediction.className);
+      formData.append("probability", String(topPrediction.probability)); // Kirim sebagai string, backend akan parse
+
+      // 3. Kirim request dengan FormData
+      const response = await fetch("/api/scan", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type" JANGAN di-set manual, browser akan menanganinya untuk FormData
           Authorization: `Bearer ${currentAuthToken}`,
         },
-        body: JSON.stringify(payload),
+        body: formData, // Kirim objek FormData
       });
-      console.log("Respons simpan scan:", response.status, response.statusText);
 
-      const data = await response.json();
+      const data: SaveScanApiResponse = await response.json(); // Gunakan tipe SaveScanApiResponse
 
       if (!response.ok) {
-        throw new Error(data.message || "Gagal menyimpan hasil scan.");
+        throw new Error(
+          data.message || data.error || "Gagal menyimpan hasil scan."
+        );
       }
       setSaveScanSuccess(data.message || "Hasil scan berhasil disimpan!");
     } catch (error: any) {
       console.error("Error saat menyimpan scan:", error);
-      setSaveScanError(error.message || "Terjadi kesalahan saat menyimpan.");
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan saat menyimpan.";
+      setSaveScanError(errorMessage);
     } finally {
       setIsSavingScan(false);
     }

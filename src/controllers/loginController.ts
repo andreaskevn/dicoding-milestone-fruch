@@ -54,7 +54,7 @@ export function useLoginController() {
         if (redirectPath) {
           router.push(redirectPath);
         } else {
-          router.push("/classify"); 
+          router.push("/"); 
         }
       } else {
         setError(

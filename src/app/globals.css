@@ -24,3 +24,44 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Page Transition Animations */
+.page-transition-wrapper {
+  position: relative;
+}
+
+/* Fade transition effect */
+.page-transition-fade-enter {
+  opacity: 0;
+}
+.page-transition-fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in-out;
+}
+.page-transition-fade-exit {
+  opacity: 1;
+}
+.page-transition-fade-exit-active {
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+}
+
+/* Slide transition effect */
+.page-transition-slide-enter {
+  transform: translateY(20px);
+  opacity: 0;
+}
+.page-transition-slide-enter-active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: all 300ms ease-in-out;
+}
+.page-transition-slide-exit {
+  transform: translateY(0);
+  opacity: 1;
+}
+.page-transition-slide-exit-active {
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+}

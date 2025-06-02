@@ -36,8 +36,8 @@ export interface LoginApiResponse {
 
 export interface RegisterApiResponse {
   message?: string;
-  user?: UserSafeData; 
-  error?: string; 
+  user?: UserSafeData;
+  error?: string;
 }
 
 export interface UserSafeData {
@@ -65,5 +65,21 @@ export interface SaveScanApiResponse {
     imageUrl: string;
     scannedAt: Date;
   };
+  error?: string;
+}
+
+export type UserProfileData = UserSafeData;
+
+export interface UpdateProfileRequestBody {
+  name?: string;
+  email?: string;
+  currentPassword?: string;
+  newPassword?: string;
+  confirmNewPassword?: string;
+}
+
+export interface UpdateProfileResponse {
+  message: string;
+  user?: UserProfileData;
   error?: string;
 }
