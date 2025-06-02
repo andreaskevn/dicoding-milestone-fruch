@@ -124,13 +124,16 @@ export default function HistoryPage() {
       console.error("Error fetching scan history:", err);
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: err instanceof Error ? err.message : "Terjadi kesalahan saat mengambil riwayat scan",
-        confirmButtonColor: '#059669',
+        icon: "error",
+        title: "Oops...",
+        text:
+          err instanceof Error
+            ? err.message
+            : "Terjadi kesalahan saat mengambil riwayat scan",
+        confirmButtonColor: "#059669",
         showCancelButton: true,
-        confirmButtonText: 'Coba Lagi',
-        cancelButtonText: 'Tutup'
+        confirmButtonText: "Coba Lagi",
+        cancelButtonText: "Tutup",
       }).then((result) => {
         if (result.isConfirmed) {
           fetchScanHistory();
@@ -157,7 +160,7 @@ export default function HistoryPage() {
 
   // Handle item selection
   const toggleItemSelection = (scanId: string) => {
-    setSelectedItems(prev => {
+    setSelectedItems((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(scanId)) {
         newSet.delete(scanId);
@@ -170,10 +173,10 @@ export default function HistoryPage() {
 
   // Select all items on current page
   const selectAllCurrentPage = () => {
-    const currentItemIds = currentItems.map(item => item.id);
-    setSelectedItems(prev => {
+    const currentItemIds = currentItems.map((item) => item.id);
+    setSelectedItems((prev) => {
       const newSet = new Set(prev);
-      currentItemIds.forEach(id => newSet.add(id));
+      currentItemIds.forEach((id) => newSet.add(id));
       return newSet;
     });
   };
@@ -187,7 +190,7 @@ export default function HistoryPage() {
   const deleteSingleScan = async (scanId: string): Promise<boolean> => {
     try {
       const response = await fetch(`/api/scan/${scanId}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -195,12 +198,12 @@ export default function HistoryPage() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Gagal menghapus scan');
+        throw new Error(errorData.message || "Gagal menghapus scan");
       }
 
       return true;
     } catch (error) {
-      console.error('Error deleting scan:', error);
+      console.error("Error deleting scan:", error);
       return false;
     }
   };
@@ -209,18 +212,17 @@ export default function HistoryPage() {
     if (selectedItems.size === 0) return;
 
     const confirmDelete = await Swal.fire({
-      icon: 'warning',
-      title: 'Konfirmasi Hapus',
+      icon: "warning",
+      title: "Konfirmasi Hapus",
       html: `Apakah Anda yakin ingin menghapus <strong>${selectedItems.size}</strong> item yang dipilih?`,
       showCancelButton: true,
-      confirmButtonColor: '#dc2626',
-      cancelButtonColor: '#6b7280',
-      confirmButtonText: 'Ya, Hapus!',
-      cancelButtonText: 'Batal',
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Ya, Hapus!",
+      cancelButtonText: "Batal",
       reverseButtons: true,
-      focusCancel: true
+      focusCancel: true,
     });
-
 
     if (!confirmDelete) return;
 
@@ -240,17 +242,17 @@ export default function HistoryPage() {
 
       // Separate successful and failed deletions
       const successfulDeletions = deletionResults
-        .filter(result => result.success)
-        .map(result => result.scanId);
+        .filter((result) => result.success)
+        .map((result) => result.scanId);
 
       const failedDeletions = deletionResults
-        .filter(result => !result.success)
-        .map(result => result.scanId);
+        .filter((result) => !result.success)
+        .map((result) => result.scanId);
 
       // Update local state by removing successfully deleted items
       if (successfulDeletions.length > 0) {
-        setScanHistory(prevHistory =>
-          prevHistory.filter(item => !successfulDeletions.includes(item.id))
+        setScanHistory((prevHistory) =>
+          prevHistory.filter((item) => !successfulDeletions.includes(item.id))
         );
       }
 
@@ -268,8 +270,8 @@ export default function HistoryPage() {
       // Show result message
       if (failedDeletions.length > 0) {
         Swal.fire({
-          icon: 'warning',
-          title: 'Hapus Sebagian Berhasil',
+          icon: "warning",
+          title: "Hapus Sebagian Berhasil",
           html: `
             <div class="text-left">
               <p><strong class="text-green-600">${successfulDeletions.length}</strong> item berhasil dihapus</p>
@@ -278,29 +280,28 @@ export default function HistoryPage() {
               <small class="text-gray-500">Silakan coba lagi untuk item yang gagal dihapus.</small>
             </div>
           `,
-          confirmButtonColor: '#059669',
-          confirmButtonText: 'OK'
+          confirmButtonColor: "#059669",
+          confirmButtonText: "OK",
         });
       } else {
         Swal.fire({
-          icon: 'success',
-          title: 'Berhasil Dihapus!',
+          icon: "success",
+          title: "Berhasil Dihapus!",
           text: `${successfulDeletions.length} item berhasil dihapus.`,
-          confirmButtonColor: '#059669',
-          confirmButtonText: 'OK',
+          confirmButtonColor: "#059669",
+          confirmButtonText: "OK",
           timer: 3000,
-          timerProgressBar: true
+          timerProgressBar: true,
         });
       }
-
     } catch (err) {
       console.error("Error deleting items:", err);
       Swal.fire({
-        icon: 'error',
-        title: 'Gagal Menghapus',
-        text: 'Terjadi kesalahan saat menghapus item. Silakan coba lagi.',
-        confirmButtonColor: '#059669',
-        confirmButtonText: 'OK'
+        icon: "error",
+        title: "Gagal Menghapus",
+        text: "Terjadi kesalahan saat menghapus item. Silakan coba lagi.",
+        confirmButtonColor: "#059669",
+        confirmButtonText: "OK",
       });
     } finally {
       setIsDeleting(false);
@@ -335,7 +336,7 @@ export default function HistoryPage() {
   if (isLoadingAuth || !isAuthenticated) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900">
-        <div className="text-center p-10 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 shadow-2xl">
+        <div className="text-center p-10 bg-white/10 bg-opacity-10 backdrop-blur-md rounded-3xl border border-white/20 shadow-2xl">
           <div className="relative">
             <div className="animate-spin h-16 w-16 border-4 border-green-200 border-t-green-500 rounded-full mx-auto mb-6"></div>
             <div className="absolute inset-0 h-16 w-16 border-4 border-transparent border-t-emerald-400 rounded-full mx-auto animate-ping"></div>
@@ -473,71 +474,304 @@ export default function HistoryPage() {
         ) : (
           <div id="results-section">
             {/* Control Bar */}
-            <div className="flex justify-between items-center mb-6">
-              <div className="flex items-center space-x-4">
-                <p className="text-gray-600">
-                  Menampilkan {startIndex + 1}-
-                  {Math.min(endIndex, scanHistory.length)} dari{" "}
-                  {scanHistory.length} hasil scan
-                </p>
-
-                {/* Delete Mode Toggle */}
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">Mode Hapus</span>
-                  <button
-                    onClick={toggleDeleteMode}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${isDeleteMode ? 'bg-emerald-600' : 'bg-gray-200'
-                      }`}
-                  >
-                    <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isDeleteMode ? 'translate-x-6' : 'translate-x-1'
-                        }`}
-                    />
-                  </button>
-                </div>
+            <div className="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/30 rounded-2xl shadow-lg border border-emerald-100/50 p-6 mb-6 backdrop-blur-sm">
+              {/* Decorative Elements */}
+              <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden rounded-2xl">
+                <div className="absolute -top-10 -right-10 w-20 h-20 bg-emerald-100/20 rounded-full blur-xl"></div>
+                <div className="absolute -bottom-10 -left-10 w-16 h-16 bg-emerald-200/30 rounded-full blur-xl"></div>
               </div>
 
-              <div className="flex items-center space-x-2">
-                {isDeleteMode && (
+              {/* Mobile Layout */}
+              <div className="block lg:hidden space-y-5 relative z-10">
+                {/* Page Info */}
+                <div className="text-center">
+                  <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-full shadow-lg">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                    <span className="text-sm font-bold">
+                      Halaman {currentPage} dari {totalPages}
+                    </span>
+                  </div>
+                </div>
+                {/* Delete Mode Toggle */}
+                <div className="flex items-center justify-center space-x-4 py-4 px-6 bg-white/60 backdrop-blur-sm rounded-xl border border-emerald-200/50 shadow-sm">
                   <div className="flex items-center space-x-2">
-                    <button
-                      onClick={selectAllCurrentPage}
-                      className="px-3 py-1 text-sm bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors"
+                    <svg
+                      className="w-4 h-4 text-emerald-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
                     >
-                      Pilih Semua
-                    </button>
-                    <button
-                      onClick={deselectAll}
-                      className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                    <span className="text-sm font-semibold text-gray-800">
+                      Mode Hapus
+                    </span>
+                  </div>
+                  <button
+                    onClick={toggleDeleteMode}
+                    className={`relative inline-flex h-8 w-14 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 shadow-lg ${
+                      isDeleteMode
+                        ? "bg-gradient-to-r from-emerald-500 to-emerald-600 shadow-emerald-200"
+                        : "bg-gradient-to-r from-gray-300 to-gray-400 shadow-gray-200"
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-6 w-6 transform rounded-full bg-white transition-all duration-300 shadow-lg ${
+                        isDeleteMode
+                          ? "translate-x-7 rotate-180"
+                          : "translate-x-1"
+                      }`}
                     >
-                      Batal Pilih
-                    </button>
-                    {selectedItems.size > 0 && (
+                      <div
+                        className={`w-full h-full rounded-full transition-colors duration-300 ${isDeleteMode ? "bg-emerald-100" : "bg-gray-100"}`}
+                      ></div>
+                    </span>
+                  </button>
+                </div>
+
+                {/* Delete Actions */}
+                {isDeleteMode && (
+                  <div className="space-y-4 animate-slideUp">
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <button
-                        onClick={deleteSelectedItems}
-                        disabled={isDeleting}
-                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1"
+                        onClick={selectAllCurrentPage}
+                        className="group px-5 py-2.5 text-sm bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-700 rounded-xl hover:from-emerald-100 hover:to-emerald-200 transition-all duration-300 border border-emerald-300/50 font-semibold shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                       >
-                        {isDeleting ? (
-                          <>
-                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                            <span>Menghapus...</span>
-                          </>
-                        ) : (
-                          <>
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                            <span>Hapus ({selectedItems.size})</span>
-                          </>
-                        )}
+                        <span className="flex items-center justify-center gap-2">
+                          <svg
+                            className="w-4 h-4 group-hover:scale-110 transition-transform"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          Pilih Semua
+                        </span>
                       </button>
+                      <button
+                        onClick={deselectAll}
+                        className="group px-5 py-2.5 text-sm bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 rounded-xl hover:from-gray-100 hover:to-gray-200 transition-all duration-300 border border-gray-300/50 font-semibold shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+                      >
+                        <span className="flex items-center justify-center gap-2">
+                          <svg
+                            className="w-4 h-4 group-hover:scale-110 transition-transform"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                          Batal Pilih
+                        </span>
+                      </button>
+                    </div>
+                    {selectedItems.size > 0 && (
+                      <div className="flex justify-center animate-slideUp">
+                        <button
+                          onClick={deleteSelectedItems}
+                          disabled={isDeleting}
+                          className="group px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 shadow-lg hover:shadow-xl font-semibold transform hover:-translate-y-1 disabled:transform-none"
+                        >
+                          {isDeleting ? (
+                            <>
+                              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                              <span>Menghapus...</span>
+                            </>
+                          ) : (
+                            <>
+                              <svg
+                                className="w-5 h-5 group-hover:scale-110 transition-transform"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                />
+                              </svg>
+                              <span>Hapus ({selectedItems.size})</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
                     )}
                   </div>
                 )}
+              </div>
 
-                <div className="text-sm text-gray-500">
-                  Halaman {currentPage} dari {totalPages}
+              {/* Desktop Layout */}
+              <div className="hidden lg:flex justify-between items-center relative z-10">
+                <div className="flex items-center space-x-8">
+                  <div className="flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-full shadow-lg">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      />
+                    </svg>
+                    <span className="text-sm font-bold">
+                      Halaman {currentPage} dari {totalPages}
+                    </span>
+                  </div>
+                  {/* Delete Mode Toggle */}
+                  <div className="flex items-center space-x-4 px-6 py-3 bg-white/60 backdrop-blur-sm rounded-xl border border-emerald-200/50 shadow-sm">
+                    <div className="flex items-center space-x-2">
+                      <svg
+                        className="w-5 h-5 text-emerald-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                      <span className="text-sm font-semibold text-gray-800">
+                        Mode Hapus
+                      </span>
+                    </div>
+                    <button
+                      onClick={toggleDeleteMode}
+                      className={`relative inline-flex h-8 w-14 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 shadow-lg ${
+                        isDeleteMode
+                          ? "bg-gradient-to-r from-emerald-500 to-emerald-600 shadow-emerald-200"
+                          : "bg-gradient-to-r from-gray-300 to-gray-400 shadow-gray-200"
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-6 w-6 transform rounded-full bg-white transition-all duration-300 shadow-lg ${
+                          isDeleteMode
+                            ? "translate-x-7 rotate-180"
+                            : "translate-x-1"
+                        }`}
+                      >
+                        <div
+                          className={`w-full h-full rounded-full transition-colors duration-300 ${isDeleteMode ? "bg-emerald-100" : "bg-gray-100"}`}
+                        ></div>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-4">
+                  {isDeleteMode && (
+                    <div className="flex items-center space-x-3 animate-fadeIn">
+                      <button
+                        onClick={selectAllCurrentPage}
+                        className="group px-5 py-2.5 text-sm bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-700 rounded-xl hover:from-emerald-100 hover:to-emerald-200 transition-all duration-300 border border-emerald-300/50 font-semibold shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+                      >
+                        <span className="flex items-center gap-2">
+                          <svg
+                            className="w-4 h-4 group-hover:scale-110 transition-transform"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                          Pilih Semua
+                        </span>
+                      </button>
+                      <button
+                        onClick={deselectAll}
+                        className="group px-5 py-2.5 text-sm bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 rounded-xl hover:from-gray-100 hover:to-gray-200 transition-all duration-300 border border-gray-300/50 font-semibold shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+                      >
+                        <span className="flex items-center gap-2">
+                          <svg
+                            className="w-4 h-4 group-hover:scale-110 transition-transform"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                          Batal Pilih
+                        </span>
+                      </button>
+                      {selectedItems.size > 0 && (
+                        <button
+                          onClick={deleteSelectedItems}
+                          disabled={isDeleting}
+                          className="group px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 shadow-lg hover:shadow-xl font-semibold transform hover:-translate-y-1 disabled:transform-none animate-ping"
+                        >
+                          {isDeleting ? (
+                            <>
+                              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                              <span>Menghapus...</span>
+                            </>
+                          ) : (
+                            <>
+                              <svg
+                                className="w-5 h-5 group-hover:scale-110 transition-transform"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                />
+                              </svg>
+                              <span>Hapus ({selectedItems.size})</span>
+                            </>
+                          )}
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -549,10 +783,11 @@ export default function HistoryPage() {
                   key={scan.id}
                   ref={(el) => setCardRef(scan.id, el)}
                   data-scan-id={scan.id}
-                  className={`scan-card bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02] cursor-pointer relative ${visibleItems.has(scan.id)
+                  className={`scan-card bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02] cursor-pointer relative ${
+                    visibleItems.has(scan.id)
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-8"
-                    } ${isDeleteMode && selectedItems.has(scan.id) ? 'ring-4 ring-emerald-500' : ''}`}
+                  } ${isDeleteMode && selectedItems.has(scan.id) ? "ring-4 ring-emerald-500" : ""}`}
                   style={{
                     transitionDelay: `${index * 100}ms`,
                   }}
@@ -567,13 +802,26 @@ export default function HistoryPage() {
                   {/* Checkbox in delete mode */}
                   {isDeleteMode && (
                     <div className="absolute top-4 left-4 z-10">
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedItems.has(scan.id)
-                          ? 'bg-emerald-500 border-emerald-500'
-                          : 'bg-white border-gray-300 hover:border-emerald-500'
-                        }`}>
+                      <div
+                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                          selectedItems.has(scan.id)
+                            ? "bg-emerald-500 border-emerald-500"
+                            : "bg-white border-gray-300 hover:border-emerald-500"
+                        }`}
+                      >
                         {selectedItems.has(scan.id) && (
-                          <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                          <svg
+                            className="w-4 h-4 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            />
                           </svg>
                         )}
                       </div>
@@ -660,6 +908,22 @@ export default function HistoryPage() {
                 </div>
               ))}
             </div>
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-xl border border-emerald-200/30 shadow-sm">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                <p className="text-gray-700 text-sm font-medium">
+                  Menampilkan{" "}
+                  <span className="font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">
+                    {startIndex + 1}-{Math.min(endIndex, scanHistory.length)}
+                  </span>{" "}
+                  dari{" "}
+                  <span className="font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-md">
+                    {scanHistory.length}
+                  </span>{" "}
+                  hasil scan
+                </p>
+              </div>
+            </div>
 
             {/* Pagination */}
             {totalPages > 1 && (
@@ -668,10 +932,11 @@ export default function HistoryPage() {
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === 1
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    currentPage === 1
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                    }`}
+                  }`}
                 >
                   <svg
                     className="w-5 h-5"
@@ -726,10 +991,11 @@ export default function HistoryPage() {
                       <button
                         key={page}
                         onClick={() => goToPage(page)}
-                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === page
+                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                          currentPage === page
                             ? "bg-emerald-600 text-white"
                             : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                          }`}
+                        }`}
                       >
                         {page}
                       </button>
@@ -741,10 +1007,11 @@ export default function HistoryPage() {
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === totalPages
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    currentPage === totalPages
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                    }`}
+                  }`}
                 >
                   <svg
                     className="w-5 h-5"
@@ -811,6 +1078,36 @@ export default function HistoryPage() {
             opacity: 1;
             transform: translateY(0);
           }
+        }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes ping {
+          0% {
+            transform: scale(0.5);
+            opacity: 0;
+          },
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+
+        .animate-ping {
+          animation: ping 1s;
+        }
+
+        .animate-slideUp {
+          animation: slideUp 0.4s ease-out;
         }
 
         .animate-fade-in {
