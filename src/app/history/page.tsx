@@ -783,7 +783,8 @@ export default function HistoryPage() {
                   key={scan.id}
                   ref={(el) => setCardRef(scan.id, el)}
                   data-scan-id={scan.id}
-                  className={`scan-card bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02] cursor-pointer relative ${visibleItems.has(scan.id)
+                  className={`scan-card bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02] cursor-pointer relative ${
+                    visibleItems.has(scan.id)
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-8"
                   } ${isDeleteMode && selectedItems.has(scan.id) ? "ring-4 ring-emerald-500" : ""}`}
@@ -931,10 +932,11 @@ export default function HistoryPage() {
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === 1
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    currentPage === 1
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                    }`}
+                  }`}
                 >
                   <svg
                     className="w-5 h-5"
@@ -989,10 +991,11 @@ export default function HistoryPage() {
                       <button
                         key={page}
                         onClick={() => goToPage(page)}
-                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === page
+                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                          currentPage === page
                             ? "bg-emerald-600 text-white"
                             : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                          }`}
+                        }`}
                       >
                         {page}
                       </button>
@@ -1004,10 +1007,11 @@ export default function HistoryPage() {
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === totalPages
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    currentPage === totalPages
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                    }`}
+                  }`}
                 >
                   <svg
                     className="w-5 h-5"
