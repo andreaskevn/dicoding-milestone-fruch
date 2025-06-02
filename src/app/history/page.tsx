@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Image from "next/image";
 import ScanDetailModal from "@/components/ScanDetailModal";
+import Swal from "sweetalert2";
 
 interface ScanResult {
   id: string;
@@ -24,6 +25,11 @@ export default function HistoryPage() {
   const [selectedScan, setSelectedScan] = useState<ScanResult | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [visibleItems, setVisibleItems] = useState<Set<string>>(new Set());
+
+  // Untuk hapus
+  const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { isAuthenticated, isLoadingAuth, user, token } = useAuth();
   const router = useRouter();
@@ -117,6 +123,19 @@ export default function HistoryPage() {
     } catch (err) {
       console.error("Error fetching scan history:", err);
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err instanceof Error ? err.message : "Terjadi kesalahan saat mengambil riwayat scan",
+        confirmButtonColor: '#059669',
+        showCancelButton: true,
+        confirmButtonText: 'Coba Lagi',
+        cancelButtonText: 'Tutup'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetchScanHistory();
+        }
+      });
     } finally {
       setIsLoading(false);
     }
@@ -128,6 +147,164 @@ export default function HistoryPage() {
 
   const closeScanDetail = () => {
     setSelectedScan(null);
+  };
+
+  // Toggle delete mode
+  const toggleDeleteMode = () => {
+    setIsDeleteMode(!isDeleteMode);
+    setSelectedItems(new Set()); // Clear selected items when toggling
+  };
+
+  // Handle item selection
+  const toggleItemSelection = (scanId: string) => {
+    setSelectedItems(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(scanId)) {
+        newSet.delete(scanId);
+      } else {
+        newSet.add(scanId);
+      }
+      return newSet;
+    });
+  };
+
+  // Select all items on current page
+  const selectAllCurrentPage = () => {
+    const currentItemIds = currentItems.map(item => item.id);
+    setSelectedItems(prev => {
+      const newSet = new Set(prev);
+      currentItemIds.forEach(id => newSet.add(id));
+      return newSet;
+    });
+  };
+
+  // Deselect all items
+  const deselectAll = () => {
+    setSelectedItems(new Set());
+  };
+
+  // Delete individual scan via API
+  const deleteSingleScan = async (scanId: string): Promise<boolean> => {
+    try {
+      const response = await fetch(`/api/scan/${scanId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Gagal menghapus scan');
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error deleting scan:', error);
+      return false;
+    }
+  };
+
+  const deleteSelectedItems = async () => {
+    if (selectedItems.size === 0) return;
+
+    const confirmDelete = await Swal.fire({
+      icon: 'warning',
+      title: 'Konfirmasi Hapus',
+      html: `Apakah Anda yakin ingin menghapus <strong>${selectedItems.size}</strong> item yang dipilih?`,
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+      reverseButtons: true,
+      focusCancel: true
+    });
+
+
+    if (!confirmDelete) return;
+
+    try {
+      setIsDeleting(true);
+
+      // Convert Set to Array for deletion
+      const itemsToDelete = Array.from(selectedItems);
+
+      // Keep track of successful and failed deletions
+      const deletionPromises = itemsToDelete.map(async (scanId) => {
+        const success = await deleteSingleScan(scanId);
+        return { scanId, success };
+      });
+
+      const deletionResults = await Promise.all(deletionPromises);
+
+      // Separate successful and failed deletions
+      const successfulDeletions = deletionResults
+        .filter(result => result.success)
+        .map(result => result.scanId);
+
+      const failedDeletions = deletionResults
+        .filter(result => !result.success)
+        .map(result => result.scanId);
+
+      // Update local state by removing successfully deleted items
+      if (successfulDeletions.length > 0) {
+        setScanHistory(prevHistory =>
+          prevHistory.filter(item => !successfulDeletions.includes(item.id))
+        );
+      }
+
+      // Clear selections and exit delete mode
+      setSelectedItems(new Set());
+      setIsDeleteMode(false);
+
+      // Adjust current page if needed
+      const remainingItems = scanHistory.length - successfulDeletions.length;
+      const newTotalPages = Math.ceil(remainingItems / itemsPerPage);
+      if (currentPage > newTotalPages && newTotalPages > 0) {
+        setCurrentPage(newTotalPages);
+      }
+
+      // Show result message
+      if (failedDeletions.length > 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Hapus Sebagian Berhasil',
+          html: `
+            <div class="text-left">
+              <p><strong class="text-green-600">${successfulDeletions.length}</strong> item berhasil dihapus</p>
+              <p><strong class="text-red-600">${failedDeletions.length}</strong> item gagal dihapus</p>
+              <br>
+              <small class="text-gray-500">Silakan coba lagi untuk item yang gagal dihapus.</small>
+            </div>
+          `,
+          confirmButtonColor: '#059669',
+          confirmButtonText: 'OK'
+        });
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil Dihapus!',
+          text: `${successfulDeletions.length} item berhasil dihapus.`,
+          confirmButtonColor: '#059669',
+          confirmButtonText: 'OK',
+          timer: 3000,
+          timerProgressBar: true
+        });
+      }
+
+    } catch (err) {
+      console.error("Error deleting items:", err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal Menghapus',
+        text: 'Terjadi kesalahan saat menghapus item. Silakan coba lagi.',
+        confirmButtonColor: '#059669',
+        confirmButtonText: 'OK'
+      });
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   // Pagination calculations
@@ -295,15 +472,73 @@ export default function HistoryPage() {
           </div>
         ) : (
           <div id="results-section">
-            {/* Results Info */}
+            {/* Control Bar */}
             <div className="flex justify-between items-center mb-6">
-              <p className="text-gray-600">
-                Menampilkan {startIndex + 1}-
-                {Math.min(endIndex, scanHistory.length)} dari{" "}
-                {scanHistory.length} hasil scan
-              </p>
-              <div className="text-sm text-gray-500">
-                Halaman {currentPage} dari {totalPages}
+              <div className="flex items-center space-x-4">
+                <p className="text-gray-600">
+                  Menampilkan {startIndex + 1}-
+                  {Math.min(endIndex, scanHistory.length)} dari{" "}
+                  {scanHistory.length} hasil scan
+                </p>
+
+                {/* Delete Mode Toggle */}
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-600">Mode Hapus</span>
+                  <button
+                    onClick={toggleDeleteMode}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${isDeleteMode ? 'bg-emerald-600' : 'bg-gray-200'
+                      }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isDeleteMode ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                    />
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                {isDeleteMode && (
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={selectAllCurrentPage}
+                      className="px-3 py-1 text-sm bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors"
+                    >
+                      Pilih Semua
+                    </button>
+                    <button
+                      onClick={deselectAll}
+                      className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                    >
+                      Batal Pilih
+                    </button>
+                    {selectedItems.size > 0 && (
+                      <button
+                        onClick={deleteSelectedItems}
+                        disabled={isDeleting}
+                        className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1"
+                      >
+                        {isDeleting ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            <span>Menghapus...</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            <span>Hapus ({selectedItems.size})</span>
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                <div className="text-sm text-gray-500">
+                  Halaman {currentPage} dari {totalPages}
+                </div>
               </div>
             </div>
 
@@ -314,16 +549,37 @@ export default function HistoryPage() {
                   key={scan.id}
                   ref={(el) => setCardRef(scan.id, el)}
                   data-scan-id={scan.id}
-                  className={`scan-card bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02] cursor-pointer ${
-                    visibleItems.has(scan.id)
+                  className={`scan-card bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02] cursor-pointer relative ${visibleItems.has(scan.id)
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-8"
-                  }`}
+                    } ${isDeleteMode && selectedItems.has(scan.id) ? 'ring-4 ring-emerald-500' : ''}`}
                   style={{
                     transitionDelay: `${index * 100}ms`,
                   }}
-                  onClick={() => openScanDetail(scan)}
+                  onClick={() => {
+                    if (isDeleteMode) {
+                      toggleItemSelection(scan.id);
+                    } else {
+                      openScanDetail(scan);
+                    }
+                  }}
                 >
+                  {/* Checkbox in delete mode */}
+                  {isDeleteMode && (
+                    <div className="absolute top-4 left-4 z-10">
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedItems.has(scan.id)
+                          ? 'bg-emerald-500 border-emerald-500'
+                          : 'bg-white border-gray-300 hover:border-emerald-500'
+                        }`}>
+                        {selectedItems.has(scan.id) && (
+                          <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                   <div className="relative h-48 w-full">
                     {scan.imageUrl ? (
                       <Image
@@ -412,11 +668,10 @@ export default function HistoryPage() {
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                    currentPage === 1
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === 1
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                  }`}
+                    }`}
                 >
                   <svg
                     className="w-5 h-5"
@@ -471,11 +726,10 @@ export default function HistoryPage() {
                       <button
                         key={page}
                         onClick={() => goToPage(page)}
-                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                          currentPage === page
+                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === page
                             ? "bg-emerald-600 text-white"
                             : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                        }`}
+                          }`}
                       >
                         {page}
                       </button>
@@ -487,11 +741,10 @@ export default function HistoryPage() {
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                    currentPage === totalPages
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === totalPages
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                  }`}
+                    }`}
                 >
                   <svg
                     className="w-5 h-5"
