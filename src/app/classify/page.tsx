@@ -38,7 +38,7 @@ export default function ClassifyPage() {
   if (isLoadingAuth || !isAuthenticated) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900">
-        <div className="text-center p-10 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 shadow-2xl">
+        <div className="text-center p-10 bg-white/10 bg-opacity-10 backdrop-blur-md rounded-3xl border border-white/20 shadow-2xl">
           <div className="relative">
             <div className="animate-spin h-16 w-16 border-4 border-green-200 border-t-green-500 rounded-full mx-auto mb-6"></div>
             <div className="absolute inset-0 h-16 w-16 border-4 border-transparent border-t-emerald-400 rounded-full mx-auto animate-ping"></div>
