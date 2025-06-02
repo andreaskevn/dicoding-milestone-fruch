@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Image from "next/image";
 import ScanDetailModal from "@/components/ScanDetailModal";
+import Swal from "sweetalert2";
 
 interface ScanResult {
   id: string;
@@ -29,7 +30,7 @@ export default function HistoryPage() {
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [isDeleting, setIsDeleting] = useState(false);
-  
+
   const { isAuthenticated, isLoadingAuth, user, token } = useAuth();
   const router = useRouter();
   const observer = useRef<IntersectionObserver | null>(null);
@@ -122,6 +123,19 @@ export default function HistoryPage() {
     } catch (err) {
       console.error("Error fetching scan history:", err);
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err instanceof Error ? err.message : "Terjadi kesalahan saat mengambil riwayat scan",
+        confirmButtonColor: '#059669',
+        showCancelButton: true,
+        confirmButtonText: 'Coba Lagi',
+        cancelButtonText: 'Tutup'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetchScanHistory();
+        }
+      });
     } finally {
       setIsLoading(false);
     }
@@ -194,18 +208,28 @@ export default function HistoryPage() {
   const deleteSelectedItems = async () => {
     if (selectedItems.size === 0) return;
 
-    const confirmDelete = window.confirm(
-      `Apakah Anda yakin ingin menghapus ${selectedItems.size} item yang dipilih?`
-    );
+    const confirmDelete = await Swal.fire({
+      icon: 'warning',
+      title: 'Konfirmasi Hapus',
+      html: `Apakah Anda yakin ingin menghapus <strong>${selectedItems.size}</strong> item yang dipilih?`,
+      showCancelButton: true,
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+      reverseButtons: true,
+      focusCancel: true
+    });
+
 
     if (!confirmDelete) return;
 
     try {
       setIsDeleting(true);
-      
+
       // Convert Set to Array for deletion
       const itemsToDelete = Array.from(selectedItems);
-      
+
       // Keep track of successful and failed deletions
       const deletionPromises = itemsToDelete.map(async (scanId) => {
         const success = await deleteSingleScan(scanId);
@@ -213,19 +237,19 @@ export default function HistoryPage() {
       });
 
       const deletionResults = await Promise.all(deletionPromises);
-      
+
       // Separate successful and failed deletions
       const successfulDeletions = deletionResults
         .filter(result => result.success)
         .map(result => result.scanId);
-      
+
       const failedDeletions = deletionResults
         .filter(result => !result.success)
         .map(result => result.scanId);
 
       // Update local state by removing successfully deleted items
       if (successfulDeletions.length > 0) {
-        setScanHistory(prevHistory => 
+        setScanHistory(prevHistory =>
           prevHistory.filter(item => !successfulDeletions.includes(item.id))
         );
       }
@@ -233,7 +257,7 @@ export default function HistoryPage() {
       // Clear selections and exit delete mode
       setSelectedItems(new Set());
       setIsDeleteMode(false);
-      
+
       // Adjust current page if needed
       const remainingItems = scanHistory.length - successfulDeletions.length;
       const newTotalPages = Math.ceil(remainingItems / itemsPerPage);
@@ -243,57 +267,45 @@ export default function HistoryPage() {
 
       // Show result message
       if (failedDeletions.length > 0) {
-        alert(`${successfulDeletions.length} item berhasil dihapus, ${failedDeletions.length} item gagal dihapus. Silakan coba lagi untuk item yang gagal.`);
+        Swal.fire({
+          icon: 'warning',
+          title: 'Hapus Sebagian Berhasil',
+          html: `
+            <div class="text-left">
+              <p><strong class="text-green-600">${successfulDeletions.length}</strong> item berhasil dihapus</p>
+              <p><strong class="text-red-600">${failedDeletions.length}</strong> item gagal dihapus</p>
+              <br>
+              <small class="text-gray-500">Silakan coba lagi untuk item yang gagal dihapus.</small>
+            </div>
+          `,
+          confirmButtonColor: '#059669',
+          confirmButtonText: 'OK'
+        });
       } else {
-        alert(`${successfulDeletions.length} item berhasil dihapus.`);
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil Dihapus!',
+          text: `${successfulDeletions.length} item berhasil dihapus.`,
+          confirmButtonColor: '#059669',
+          confirmButtonText: 'OK',
+          timer: 3000,
+          timerProgressBar: true
+        });
       }
-      
+
     } catch (err) {
       console.error("Error deleting items:", err);
-      alert("Gagal menghapus item. Silakan coba lagi.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal Menghapus',
+        text: 'Terjadi kesalahan saat menghapus item. Silakan coba lagi.',
+        confirmButtonColor: '#059669',
+        confirmButtonText: 'OK'
+      });
     } finally {
       setIsDeleting(false);
     }
   };
-
-  //  // Delete selected items
-  // const deleteSelectedItems = async () => {
-  //   if (selectedItems.size === 0) return;
-
-  //   const confirmDelete = window.confirm(
-  //     `Apakah Anda yakin ingin menghapus ${selectedItems.size} item yang dipilih?`
-  //   );
-
-  //   if (!confirmDelete) return;
-
-  //   try {
-  //     setIsDeleting(true);
-      
-  //     // Convert Set to Array for deletion
-  //     const itemsToDelete = Array.from(selectedItems);
-      
-  //     // Here you would make API calls to delete the items
-  //     // For now, I'll simulate the deletion by removing from local state
-  //     const updatedHistory = scanHistory.filter(item => !selectedItems.has(item.id));
-  //     setScanHistory(updatedHistory);
-      
-  //     // Clear selections and exit delete mode
-  //     setSelectedItems(new Set());
-  //     setIsDeleteMode(false);
-      
-  //     // Adjust current page if needed
-  //     const newTotalPages = Math.ceil(updatedHistory.length / itemsPerPage);
-  //     if (currentPage > newTotalPages && newTotalPages > 0) {
-  //       setCurrentPage(newTotalPages);
-  //     }
-      
-  //   } catch (err) {
-  //     console.error("Error deleting items:", err);
-  //     alert("Gagal menghapus item. Silakan coba lagi.");
-  //   } finally {
-  //     setIsDeleting(false);
-  //   }
-  // };
 
   // Pagination calculations
   const totalPages = Math.ceil(scanHistory.length / itemsPerPage);
@@ -468,20 +480,18 @@ export default function HistoryPage() {
                   {Math.min(endIndex, scanHistory.length)} dari{" "}
                   {scanHistory.length} hasil scan
                 </p>
-                
+
                 {/* Delete Mode Toggle */}
                 <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-600">Mode Hapus</span>
                   <button
                     onClick={toggleDeleteMode}
-                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
-                      isDeleteMode ? 'bg-emerald-600' : 'bg-gray-200'
-                    }`}
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${isDeleteMode ? 'bg-emerald-600' : 'bg-gray-200'
+                      }`}
                   >
                     <span
-                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                        isDeleteMode ? 'translate-x-6' : 'translate-x-1'
-                      }`}
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isDeleteMode ? 'translate-x-6' : 'translate-x-1'
+                        }`}
                     />
                   </button>
                 </div>
@@ -525,7 +535,7 @@ export default function HistoryPage() {
                     )}
                   </div>
                 )}
-                
+
                 <div className="text-sm text-gray-500">
                   Halaman {currentPage} dari {totalPages}
                 </div>
@@ -539,11 +549,10 @@ export default function HistoryPage() {
                   key={scan.id}
                   ref={(el) => setCardRef(scan.id, el)}
                   data-scan-id={scan.id}
-                  className={`scan-card bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02] cursor-pointer relative ${
-                    visibleItems.has(scan.id)
+                  className={`scan-card bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02] cursor-pointer relative ${visibleItems.has(scan.id)
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-8"
-                  } ${isDeleteMode && selectedItems.has(scan.id) ? 'ring-4 ring-emerald-500' : ''}`}
+                    } ${isDeleteMode && selectedItems.has(scan.id) ? 'ring-4 ring-emerald-500' : ''}`}
                   style={{
                     transitionDelay: `${index * 100}ms`,
                   }}
@@ -558,11 +567,10 @@ export default function HistoryPage() {
                   {/* Checkbox in delete mode */}
                   {isDeleteMode && (
                     <div className="absolute top-4 left-4 z-10">
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                        selectedItems.has(scan.id) 
-                          ? 'bg-emerald-500 border-emerald-500' 
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${selectedItems.has(scan.id)
+                          ? 'bg-emerald-500 border-emerald-500'
                           : 'bg-white border-gray-300 hover:border-emerald-500'
-                      }`}>
+                        }`}>
                         {selectedItems.has(scan.id) && (
                           <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
@@ -660,11 +668,10 @@ export default function HistoryPage() {
                 <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                    currentPage === 1
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === 1
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                  }`}
+                    }`}
                 >
                   <svg
                     className="w-5 h-5"
@@ -719,11 +726,10 @@ export default function HistoryPage() {
                       <button
                         key={page}
                         onClick={() => goToPage(page)}
-                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                          currentPage === page
+                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === page
                             ? "bg-emerald-600 text-white"
                             : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                        }`}
+                          }`}
                       >
                         {page}
                       </button>
@@ -735,11 +741,10 @@ export default function HistoryPage() {
                 <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                    currentPage === totalPages
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${currentPage === totalPages
                       ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                       : "bg-white text-emerald-600 hover:bg-emerald-50 border border-emerald-200"
-                  }`}
+                    }`}
                 >
                   <svg
                     className="w-5 h-5"
