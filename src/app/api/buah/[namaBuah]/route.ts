@@ -1,13 +1,17 @@
+// src/app/api/buah/[namaBuah]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import type { FruitData } from "@/lib/definition";
 
+// Handler untuk GET request
 export async function GET(
-  _request: NextRequest,
-  { params }: { params: { namaBuah: string } }
+  request: NextRequest,
+  // Menggunakan 'context' sebagai nama parameter dan mendefinisikan tipenya secara eksplisit
+  context: { params: { namaBuah: string } }
 ) {
   try {
-    const { namaBuah } = await params;
+    // Akses namaBuah dari context.params
+    const { namaBuah } = context.params;
 
     if (!namaBuah) {
       return NextResponse.json(
@@ -26,16 +30,31 @@ export async function GET(
     });
 
     if (!buah) {
+      console.log(
+        `[API /api/buah/[namaBuah]] Buah "${decodedNamaBuah}" tidak ditemukan di database.`
+      );
       return NextResponse.json(
         { message: `Buah dengan nama "${decodedNamaBuah}" tidak ditemukan.` },
         { status: 404 }
       );
     }
 
+    console.log(
+      `[API /api/buah/[namaBuah]] Buah "${decodedNamaBuah}" ditemukan:`,
+      buah
+    );
     return NextResponse.json(buah, { status: 200 });
   } catch (error: any) {
+    console.error(
+      "[API /api/buah/[namaBuah]] Kesalahan saat mengambil data buah:",
+      error
+    );
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : "Terjadi kesalahan internal server.";
     return NextResponse.json(
-      { message: "Gagal mengambil data buah.", error: error.message },
+      { message: "Gagal mengambil data buah.", error: errorMessage },
       { status: 500 }
     );
   }
