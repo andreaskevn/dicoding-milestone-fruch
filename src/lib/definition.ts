@@ -27,11 +27,8 @@ export interface RegisterFormState {
 export interface LoginApiResponse {
   token?: string;
   message?: string;
-  user?: {
-    id: string;
-    name: string;
-    email: string;
-  };
+  user?: UserSafeData;
+  error?: string;
 }
 
 export interface RegisterApiResponse {
@@ -43,7 +40,7 @@ export interface RegisterApiResponse {
 export interface UserSafeData {
   id: string;
   email: string;
-  name: string;
+  name?: string | null;
 }
 
 export interface SaveScanRequestBody {

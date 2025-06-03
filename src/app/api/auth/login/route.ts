@@ -81,8 +81,6 @@ export async function POST(
       id: userWithoutPassword.id,
       email: userWithoutPassword.email,
       name: userWithoutPassword.name,
-      createdAt: userWithoutPassword.createdAt,
-      updatedAt: userWithoutPassword.updatedAt,
     };
 
     return NextResponse.json(
