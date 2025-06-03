@@ -2,7 +2,7 @@
 // (atau src/app/api/buah/[id]/route.ts jika Anda tetap menggunakan path itu)
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import jwt from "jsonwebtoken"; // Pastikan tipe JwtPayload diimpor atau didefinisikan jika digunakan
+import jwt from "jsonwebtoken";
 import fs from "fs/promises";
 import path from "path";
 
@@ -15,21 +15,24 @@ interface JwtPayload {
 }
 
 export async function DELETE(
-  request: NextRequest, // Menggunakan NextRequest
-  { params }: { params: { id: string } } // Signature standar untuk params
+  request: NextRequest,
+  // Mencoba signature di mana 'params' adalah Promise, sesuai saran Anda
+  { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
-  const { id: scanId } = params; // 'id' dari URL adalah scanId
-
-  if (!scanId) {
-    return NextResponse.json(
-      { message: "ID riwayat scan diperlukan.", error: "Bad Request" },
-      { status: 400 }
-    );
-  }
-
-  let imagePathToDelete: string | null = null;
-
   try {
+    // Await 'params' untuk mendapatkan objek yang berisi 'id'
+    const resolvedParams = await params;
+    const { id: scanId } = resolvedParams; // 'id' dari URL adalah scanId
+
+    if (!scanId) {
+      return NextResponse.json(
+        { message: "ID riwayat scan diperlukan.", error: "Bad Request" },
+        { status: 400 }
+      );
+    }
+
+    let imagePathToDelete: string | null = null;
+
     // 1. Autentikasi Pengguna
     const authHeader = request.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -68,7 +71,6 @@ export async function DELETE(
       );
     }
 
-    // Pastikan decodedPayload dan userId ada dan bertipe string
     if (
       !decodedPayload ||
       typeof decodedPayload.userId !== "string" ||
@@ -107,8 +109,6 @@ export async function DELETE(
       );
     }
 
-    // Simpan path gambar untuk dihapus nanti (jika imageUrl adalah path relatif di public)
-    // Jika imageUrl adalah URL eksternal atau data URI base64, logika ini perlu disesuaikan
     if (
       scanToDelete.imageUrl &&
       !scanToDelete.imageUrl.startsWith("http") &&
@@ -116,8 +116,8 @@ export async function DELETE(
     ) {
       imagePathToDelete = path.join(
         process.cwd(),
-        "public", // Asumsi gambar disimpan di folder public
-        scanToDelete.imageUrl // Asumsi imageUrl adalah path relatif dari public, misal /uploads/scan/gambar.jpg
+        "public",
+        scanToDelete.imageUrl
       );
     }
 
@@ -135,10 +135,7 @@ export async function DELETE(
           `File gambar ${scanToDelete.imageUrl} berhasil dihapus dari ${imagePathToDelete}.`
         );
       } catch (fileError: any) {
-        // Abaikan jika file tidak ditemukan (mungkin sudah terhapus atau path salah)
-        // atau jika fs.access melempar error karena file tidak ada
         if (fileError.code !== "ENOENT") {
-          // ENOENT = Error NO ENTry (file not found)
           console.warn(
             `Gagal menghapus file gambar ${scanToDelete.imageUrl} atau file tidak ditemukan:`,
             fileError
@@ -171,7 +168,7 @@ export async function DELETE(
     }
 
     return NextResponse.json(
-      { message: errorMessage, error: "Internal Server Error" }, // Sebaiknya error di sini lebih spesifik jika diketahui
+      { message: errorMessage, error: "Internal Server Error" },
       { status: statusCode }
     );
   }
