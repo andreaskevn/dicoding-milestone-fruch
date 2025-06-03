@@ -43,7 +43,7 @@ export interface RegisterApiResponse {
 export interface UserSafeData {
   id: string;
   email: string;
-  name?: string;
+  name: string;
 }
 
 export interface SaveScanRequestBody {

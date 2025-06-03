@@ -13,7 +13,7 @@ import type {
 export async function POST(
   request: Request
 ): Promise<NextResponse<LoginApiResponse>> {
-  // Menggunakan NextResponse dan LoginApiResponse untuk tipe kembali
+  // Menggunakan NextResponse dan LoginApiResponse
   try {
     const body: LoginFormState = await request.json(); // Memberi tipe pada body
     const { email, password } = body;
@@ -63,18 +63,19 @@ export async function POST(
       email: user.email,
     };
 
+    // Ini adalah bagian yang Anda berikan, menggunakan SignOptions secara eksplisit
     const signOptions: SignOptions = {
-      expiresIn: jwtExpiresIn, // jwtExpiresIn adalah string, misal "1h"
-      // algorithm: 'HS256' // Opsional, default HS256
+      expiresIn: jwtExpiresIn as jwt.StringValue, // Cast to StringValue to satisfy type
+      algorithm: 'HS256' // Baris ini dikomentari sesuai kode Anda
     };
 
     const token = jwt.sign(payload, jwtSecret, signOptions);
 
-    console.log("Token berhasil dibuat untuk user:", user.email);
+    console.log("Token:", token);
 
     const { passwordHash, ...userWithoutPassword } = user;
 
-    // Pastikan objek user yang dikembalikan sesuai dengan UserSafeData
+    // Memastikan objek user yang dikembalikan sesuai dengan UserSafeData
     const responseUser: UserSafeData = {
       id: userWithoutPassword.id,
       email: userWithoutPassword.email,
@@ -92,7 +93,6 @@ export async function POST(
       { status: 200 }
     );
   } catch (e: any) {
-    // Pertimbangkan 'unknown' dan type checking
     console.error("Login Error:", e);
     const errorMessage =
       e instanceof Error ? e.message : "Terjadi kesalahan internal";
@@ -100,7 +100,7 @@ export async function POST(
       {
         message: "Login gagal, terjadi kesalahan pada server",
         error: errorMessage,
-      },
+      }, // Menambahkan field error
       { status: 500 }
     );
   }
