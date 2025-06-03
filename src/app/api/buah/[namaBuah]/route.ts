@@ -3,23 +3,16 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import type { FruitData } from "@/lib/definition";
 
-// Interface Params bisa tetap ada untuk kejelasan atau penggunaan lain jika diperlukan,
-// tapi kita akan inline strukturnya di signature GET untuk mengatasi error build Vercel.
-interface Params {
-  namaBuah: string;
-}
-
 // Handler untuk GET request
 export async function GET(
   request: Request,
-  // Definisikan struktur params secara eksplisit dan inline di sini
-  context: { params: { namaBuah: string } }
+  // Destructure params langsung dan berikan tipe di sini
+  // Ini adalah cara standar untuk App Router Route Handlers
+  { params }: { params: { namaBuah: string } }
 ) {
   try {
-    // Await context.params untuk memastikan sudah resolve,
-    // berdasarkan pesan error runtime Vercel sebelumnya.
-    const routeParams = await context.params;
-    const { namaBuah } = routeParams; // Akses namaBuah dari params yang sudah di-resolve
+    // Akses namaBuah langsung dari params yang sudah di-destructure
+    const { namaBuah } = params;
 
     if (!namaBuah) {
       return NextResponse.json(
