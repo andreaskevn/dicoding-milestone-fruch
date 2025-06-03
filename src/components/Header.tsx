@@ -148,7 +148,7 @@ export default function Header() {
                     <div className="min-w-0 flex flex-col items-start">
                       <p
                         className="text-white text-sm font-semibold truncate max-w-[160px]"
-                        title={user?.name}
+                        title={user?.name ?? undefined}
                       >
                         {user?.name}
                       </p>
