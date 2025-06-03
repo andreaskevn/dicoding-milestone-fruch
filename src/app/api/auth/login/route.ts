@@ -45,7 +45,7 @@ export async function POST(
     }
 
     const jwtSecret = process.env.JWT_SECRET;
-    const jwtExpiresIn = process.env.JWT_EXPIRES_IN || '1h';
+    const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "1h";
 
     if (!jwtSecret) {
       console.error("JWT_SECRET tidak ditemukan di environment variables.");
@@ -63,10 +63,11 @@ export async function POST(
       email: user.email,
     };
 
-    // Ini adalah bagian yang Anda berikan, menggunakan SignOptions secara eksplisit
+    // Menggunakan SignOptions secara eksplisit
     const signOptions: SignOptions = {
-      expiresIn: jwtExpiresIn as jwt.StringValue, // Cast to StringValue to satisfy type
-      algorithm: 'HS256' // Baris ini dikomentari sesuai kode Anda
+      // Hapus type assertion 'as jwt.StringValue' karena tidak diperlukan dan menyebabkan error
+      expiresIn: jwtExpiresIn,
+      // algorithm: 'HS256' // Anda bisa biarkan ini dikomentari jika HS256 adalah default yang diinginkan
     };
 
     const token = jwt.sign(payload, jwtSecret, signOptions);
