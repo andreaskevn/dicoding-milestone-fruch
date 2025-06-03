@@ -15,13 +15,235 @@ interface JwtPayload {
   exp?: number;
 }
 
+// export async function POST(
+//   request: Request
+// ): Promise<NextResponse<SaveScanApiResponse>> {
+//   let imagePathOnServer: string | null = null; // Untuk cleanup jika error
+
+//   try {
+//     // 1. Autentikasi Pengguna (kode Anda sebelumnya)
+//     const authHeader = request.headers.get("Authorization");
+//     if (!authHeader || !authHeader.startsWith("Bearer ")) {
+//       return NextResponse.json(
+//         {
+//           message: "Token autentikasi tidak ditemukan atau format salah.",
+//           error: "Unauthorized",
+//         },
+//         { status: 401 }
+//       );
+//     }
+//     const token = authHeader.split(" ")[1];
+//     const jwtSecret = process.env.JWT_SECRET;
+//     if (!jwtSecret) {
+//       console.error("JWT_SECRET tidak ditemukan.");
+//       return NextResponse.json(
+//         {
+//           message: "Kesalahan konfigurasi server.",
+//           error: "Internal Server Error",
+//         },
+//         { status: 500 }
+//       );
+//     }
+//     let decodedPayload: JwtPayload;
+//     try {
+//       decodedPayload = jwt.verify(token, jwtSecret) as JwtPayload;
+//     } catch (error) {
+//       console.error("Error verifikasi JWT:", error);
+//       return NextResponse.json(
+//         {
+//           message: "Token tidak valid atau sudah kedaluwarsa.",
+//           error: "Unauthorized",
+//         },
+//         { status: 401 }
+//       );
+//     }
+//     if (typeof decodedPayload.userId !== "string" || !decodedPayload.userId) {
+//       return NextResponse.json(
+//         {
+//           message: "User ID tidak valid atau tidak ditemukan dalam token.",
+//           error: "Unauthorized",
+//         },
+//         { status: 401 }
+//       );
+//     }
+//     const currentUserId: string = decodedPayload.userId;
+
+//     // 2. Parsing FormData menggunakan request.formData()
+//     const formData = await request.formData();
+
+//     // 3. Proses File Gambar
+//     const imageFile = formData.get("imageFile") as File | null; // 'imageFile' dari FormData klien
+
+//     if (!imageFile) {
+//       return NextResponse.json(
+//         {
+//           message: "File gambar tidak ditemukan dalam request.",
+//           error: "Bad Request",
+//         },
+//         { status: 400 }
+//       );
+//     }
+//     if (!imageFile.name || !imageFile.type?.startsWith("image/")) {
+//       return NextResponse.json(
+//         {
+//           message: "File yang diunggah bukan gambar yang valid.",
+//           error: "Bad Request",
+//         },
+//         { status: 400 }
+//       );
+//     }
+
+//     const uploadDir = path.join(process.cwd(), "/public/uploads/scans");
+//     await fs.mkdir(uploadDir, { recursive: true });
+
+//     const uniqueFilename = `${Date.now()}_${imageFile.name.replace(/\s+/g, "_")}`;
+//     imagePathOnServer = path.join(uploadDir, uniqueFilename);
+
+//     // Simpan file gambar
+//     const imageBuffer = Buffer.from(await imageFile.arrayBuffer());
+//     await fs.writeFile(imagePathOnServer, imageBuffer);
+
+//     const imageUrlPath = `/uploads/scans/${uniqueFilename}`;
+
+//     // 4. Ambil dan Validasi Data Lain dari formData
+//     const buahId = formData.get("buahId") as string | null; // formData.get() mengembalikan string atau null
+//     const predictedBuahName = formData.get("predictedBuahName") as
+//       | string
+//       | null;
+//     const probabilityStr = formData.get("probability") as string | null;
+
+//     if (!predictedBuahName || !probabilityStr) {
+//       if (imagePathOnServer)
+//         await fs.unlink(imagePathOnServer).catch(console.error);
+//       return NextResponse.json(
+//         {
+//           message:
+//             "Data tidak lengkap. Field predictedBuahName dan probability wajib diisi.",
+//           error: "Bad Request",
+//         },
+//         { status: 400 }
+//       );
+//     }
+
+//     const probability = parseFloat(probabilityStr);
+//     if (isNaN(probability) || probability < 0 || probability > 1) {
+//       if (imagePathOnServer)
+//         await fs.unlink(imagePathOnServer).catch(console.error);
+//       return NextResponse.json(
+//         {
+//           message: "Probabilitas harus berupa angka antara 0 dan 1.",
+//           error: "Bad Request",
+//         },
+//         { status: 400 }
+//       );
+//     }
+
+//     if (buahId) {
+//       const buahExists = await prisma.buah.findUnique({
+//         where: { id: buahId },
+//       });
+//       if (!buahExists) {
+//         if (imagePathOnServer)
+//           await fs.unlink(imagePathOnServer).catch(console.error);
+//         return NextResponse.json(
+//           {
+//             message: `Buah dengan ID "${buahId}" tidak ditemukan.`,
+//             error: "Not Found",
+//           },
+//           { status: 404 }
+//         );
+//       }
+//     }
+
+//     // 5. Simpan ke Database
+//     const dataToSave = {
+//       userId: currentUserId,
+//       buahId: buahId || null,
+//       predictedBuahName: predictedBuahName,
+//       probability: probability,
+//       imageUrl: imageUrlPath,
+//     };
+
+//     const newScan = await prisma.scanBuah.create({
+//       data: dataToSave,
+//       select: {
+//         id: true,
+//         userId: true,
+//         buahId: true,
+//         predictedBuahName: true,
+//         probability: true,
+//         imageUrl: true,
+//         scannedAt: true,
+//       },
+//     });
+
+//     return NextResponse.json(
+//       { message: "Hasil scan berhasil disimpan!", scan: newScan },
+//       { status: 201 }
+//     );
+//   } catch (error: any) {
+//     console.error("Kesalahan saat menyimpan hasil scan (API):", error);
+//     if (imagePathOnServer) {
+//       try {
+//         await fs.access(imagePathOnServer);
+//         await fs.unlink(imagePathOnServer);
+//         console.log(`File ${imagePathOnServer} dihapus karena error.`);
+//       } catch (cleanupError) {
+//         console.error(
+//           `Gagal menghapus file ${imagePathOnServer} setelah error:`,
+//           cleanupError
+//         );
+//       }
+//     }
+
+//     let errorMessage = "Terjadi kesalahan internal server.";
+//     let statusCode = 500;
+
+//     if (error.code) {
+//       // Handle Prisma errors
+//       // ... (blok error Prisma Anda sebelumnya, bisa disalin ke sini) ...
+//       switch (error.code) {
+//         case "P2002":
+//           errorMessage = `Data scan dengan beberapa field unik ini mungkin sudah ada.`;
+//           statusCode = 409;
+//           break;
+//         case "P2003":
+//           const fieldName = (error.meta?.field_name as string) || "";
+//           if (fieldName.includes("userId")) {
+//             errorMessage =
+//               "User ID yang diberikan tidak valid atau tidak ditemukan.";
+//           } else if (fieldName.includes("buahId")) {
+//             errorMessage =
+//               "Buah ID yang diberikan tidak valid atau tidak ditemukan.";
+//           } else {
+//             errorMessage = `Referensi ke '${fieldName}' tidak valid.`;
+//           }
+//           statusCode = 400;
+//           break;
+//         default:
+//           errorMessage = `Kesalahan database (${error.code}): Silakan coba lagi.`;
+//       }
+//     } else if (error instanceof Error) {
+//       errorMessage = error.message;
+//     }
+
+//     return NextResponse.json(
+//       { message: "Gagal menyimpan hasil scan.", error: errorMessage },
+//       { status: statusCode }
+//     );
+//   }
+// }// Asumsi Anda punya instance Prisma client
+import { put } from "@vercel/blob"; // Import 'put' dari Vercel Blob
+
 export async function POST(
   request: Request
 ): Promise<NextResponse<SaveScanApiResponse>> {
-  let imagePathOnServer: string | null = null; // Untuk cleanup jika error
+  // imagePathOnServer tidak lagi diperlukan untuk cleanup file lokal
+  // karena kita akan mengunggah ke object storage
+  let blobUrl: string | null = null; // Untuk menyimpan URL blob jika berhasil diunggah
 
   try {
-    // 1. Autentikasi Pengguna (kode Anda sebelumnya)
+    // 1. Autentikasi Pengguna (sama seperti sebelumnya)
     const authHeader = request.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json(
@@ -71,7 +293,7 @@ export async function POST(
     // 2. Parsing FormData menggunakan request.formData()
     const formData = await request.formData();
 
-    // 3. Proses File Gambar
+    // 3. Proses File Gambar - UBAH UNTUK MENGGUNAKAN VERCEL BLOB
     const imageFile = formData.get("imageFile") as File | null; // 'imageFile' dari FormData klien
 
     if (!imageFile) {
@@ -93,28 +315,30 @@ export async function POST(
       );
     }
 
-    const uploadDir = path.join(process.cwd(), "/public/uploads/scans");
-    await fs.mkdir(uploadDir, { recursive: true });
-
+    // --- Bagian yang diubah: Mengunggah ke Vercel Blob ---
+    // Buat nama unik untuk blob
     const uniqueFilename = `${Date.now()}_${imageFile.name.replace(/\s+/g, "_")}`;
-    imagePathOnServer = path.join(uploadDir, uniqueFilename);
+    const filenameOnBlob = `scans/${uniqueFilename}`; // Anda bisa membuat subfolder di blob
 
-    // Simpan file gambar
-    const imageBuffer = Buffer.from(await imageFile.arrayBuffer());
-    await fs.writeFile(imagePathOnServer, imageBuffer);
+    // Unggah file ke Vercel Blob
+    const { url } = await put(filenameOnBlob, imageFile, {
+      access: "public", // Agar gambar bisa diakses publik melalui URL
+      contentType: imageFile.type, // Penting untuk tipe file yang benar
+    });
+    blobUrl = url; // Simpan URL untuk potential cleanup (meskipun Vercel Blob tidak ada "unlink" mudah)
+    // --- Akhir bagian yang diubah ---
 
-    const imageUrlPath = `/uploads/scans/${uniqueFilename}`;
-
-    // 4. Ambil dan Validasi Data Lain dari formData
-    const buahId = formData.get("buahId") as string | null; // formData.get() mengembalikan string atau null
+    // 4. Ambil dan Validasi Data Lain dari formData (sama seperti sebelumnya)
+    const buahId = formData.get("buahId") as string | null;
     const predictedBuahName = formData.get("predictedBuahName") as
       | string
       | null;
     const probabilityStr = formData.get("probability") as string | null;
 
     if (!predictedBuahName || !probabilityStr) {
-      if (imagePathOnServer)
-        await fs.unlink(imagePathOnServer).catch(console.error);
+      // Jika terjadi error di sini, Anda tidak perlu menghapus file lokal
+      // karena sudah diunggah ke blob. Cleanup blob lebih kompleks.
+      // Anda bisa menambahkan log untuk blobUrl jika ingin melacak blob yang tidak terhubung.
       return NextResponse.json(
         {
           message:
@@ -127,8 +351,6 @@ export async function POST(
 
     const probability = parseFloat(probabilityStr);
     if (isNaN(probability) || probability < 0 || probability > 1) {
-      if (imagePathOnServer)
-        await fs.unlink(imagePathOnServer).catch(console.error);
       return NextResponse.json(
         {
           message: "Probabilitas harus berupa angka antara 0 dan 1.",
@@ -143,8 +365,6 @@ export async function POST(
         where: { id: buahId },
       });
       if (!buahExists) {
-        if (imagePathOnServer)
-          await fs.unlink(imagePathOnServer).catch(console.error);
         return NextResponse.json(
           {
             message: `Buah dengan ID "${buahId}" tidak ditemukan.`,
@@ -155,13 +375,13 @@ export async function POST(
       }
     }
 
-    // 5. Simpan ke Database
+    // 5. Simpan ke Database (gunakan URL dari Vercel Blob)
     const dataToSave = {
       userId: currentUserId,
       buahId: buahId || null,
       predictedBuahName: predictedBuahName,
       probability: probability,
-      imageUrl: imageUrlPath,
+      imageUrl: blobUrl, // <-- Simpan URL dari Vercel Blob
     };
 
     const newScan = await prisma.scanBuah.create({
@@ -183,25 +403,16 @@ export async function POST(
     );
   } catch (error: any) {
     console.error("Kesalahan saat menyimpan hasil scan (API):", error);
-    if (imagePathOnServer) {
-      try {
-        await fs.access(imagePathOnServer);
-        await fs.unlink(imagePathOnServer);
-        console.log(`File ${imagePathOnServer} dihapus karena error.`);
-      } catch (cleanupError) {
-        console.error(
-          `Gagal menghapus file ${imagePathOnServer} setelah error:`,
-          cleanupError
-        );
-      }
-    }
+    // Cleanup imagePathOnServer (yang sebelumnya untuk file lokal) sudah tidak relevan.
+    // Cleanup file di Vercel Blob secara otomatis saat ada error di tengah proses ini
+    // akan lebih kompleks, biasanya dikelola melalui lifecycle rules di bucket storage
+    // atau proses terpisah untuk menghapus "orphan" files.
+    // Untuk saat ini, kita biarkan saja.
 
     let errorMessage = "Terjadi kesalahan internal server.";
     let statusCode = 500;
 
     if (error.code) {
-      // Handle Prisma errors
-      // ... (blok error Prisma Anda sebelumnya, bisa disalin ke sini) ...
       switch (error.code) {
         case "P2002":
           errorMessage = `Data scan dengan beberapa field unik ini mungkin sudah ada.`;

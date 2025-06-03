@@ -11,6 +11,7 @@
   "dependencies": {
     "@prisma/client": "^6.8.2",
     "@tensorflow/tfjs": "^4.22.0",
+    "@vercel/blob": "^1.1.1",
     "bcryptjs": "^3.0.2",
     "formidable": "^3.5.4",
     "framer-motion": "^12.15.0",
