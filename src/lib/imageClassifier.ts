@@ -117,7 +117,13 @@ export async function classifyImage(
         typeof predictionsOutput === "object" &&
         predictionsOutput !== null
       ) {
-        Object.values(predictionsOutput).forEach((t) => t.dispose());
+        Object.values(predictionsOutput).forEach((t: tf.Tensor) => {
+          // Beri tipe eksplisit pada 't'
+          if (t instanceof tf.Tensor) {
+            // Pastikan t adalah Tensor sebelum dispose
+            t.dispose();
+          }
+        });
       }
     }
     console.log("Tensor dibersihkan.");
