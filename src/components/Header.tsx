@@ -103,6 +103,12 @@ export default function Header() {
               Beranda
             </Link>
             <Link
+              href="/about"
+              className={getLinkClasses("/about", "font-bold pb-1")}
+            >
+              About Us
+            </Link>
+            <Link
               href="/classify"
               className={getLinkClasses("/classify", "font-bold pb-1")}
             >
@@ -377,6 +383,16 @@ export default function Header() {
               onClick={toggleMenu}
             >
               Beranda
+            </Link>
+            <Link
+              href="/about"
+              className={getMobileLinkClasses(
+                "/about",
+                "font-medium py-3 px-4 rounded-lg"
+              )}
+              onClick={toggleMenu}
+            >
+              About Us
             </Link>
             <Link
               href="/classify"

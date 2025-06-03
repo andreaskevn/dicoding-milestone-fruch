@@ -9,6 +9,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import Footer from "@/components/Footer";
 
 export default function UsersPage() {
   const { user: authUser, isAuthenticated, isLoadingAuth } = useAuth();
@@ -699,34 +700,7 @@ export default function UsersPage() {
       </div>
 
       {/* Footer */}
-      <footer className="relative z-10 text-center py-8 mt-16">
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 max-w-md mx-auto border border-white/40 shadow-lg">
-          <div className="flex items-center justify-center mb-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mr-3">
-              <svg
-                className="w-5 h-5 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-            </div>
-            <span className="text-lg font-semibold text-gray-700">
-              Fruch - Fruit Check
-            </span>
-          </div>
-          <p className="text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} Powered by Advanced AI Technology
-          </p>
-          <p className="text-xs text-gray-400 mt-1">Hak Cipta Dilindungi</p>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Custom styles for SweetAlert */}
       <style jsx global>{`
