@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/authContext";
 import RootLayoutClient from "./RootLayoutClient";
+import { Suspense } from "react"
 
 
 const geistSans = Geist({
@@ -31,7 +32,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-          <RootLayoutClient>{children}</RootLayoutClient>
+          <Suspense fallback={<div>Loading...</div>}> {/* Add Suspense here */}
+            <RootLayoutClient>{children}</RootLayoutClient>
+          </Suspense>
         </AuthProvider>
       </body>
     </html>
