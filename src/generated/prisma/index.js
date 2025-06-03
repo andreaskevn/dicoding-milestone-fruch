@@ -152,7 +152,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/root/dicoding/dicoding-milestone-fruch/src/generated/prisma",
+      "value": "D:\\Materi\\Kuliah\\Kerjaan\\Asisten Dosen\\PBO\\Code\\DICODING\\dicoding-milestone-fruch\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -166,7 +166,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/root/dicoding/dicoding-milestone-fruch/prisma/schema.prisma",
+    "sourceFilePath": "D:\\Materi\\Kuliah\\Kerjaan\\Asisten Dosen\\PBO\\Code\\DICODING\\dicoding-milestone-fruch\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
