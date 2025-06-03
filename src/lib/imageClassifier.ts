@@ -3,7 +3,7 @@ import type { PredictionResult } from "@/lib/definition";
 
 let model: tf.GraphModel | null = null;
 
-const MODEL_URL = "/model-seka-revisi/model.json";
+const MODEL_URL = "/model-chat-2/model.json";
 
 const CLASS_NAMES = [
   "Apel",
