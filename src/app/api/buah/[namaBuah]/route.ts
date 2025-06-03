@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import type { FruitData } from "@/lib/definition";
 
+// Interface Params bisa tetap ada untuk kejelasan atau penggunaan lain jika diperlukan,
+// tapi kita akan inline strukturnya di signature GET untuk mengatasi error build Vercel.
 interface Params {
   namaBuah: string;
 }
@@ -10,16 +12,14 @@ interface Params {
 // Handler untuk GET request
 export async function GET(
   request: Request,
-  // Gunakan signature standar yang diterima TypeScript untuk RouteContext
-  { params }: { params: Params }
+  // Definisikan struktur params secara eksplisit dan inline di sini
+  context: { params: { namaBuah: string } }
 ) {
   try {
-    // Meskipun 'params' di sini secara tipe adalah objek biasa (Params),
-    // kita akan coba await berdasarkan pesan error runtime Vercel.
-    // Jika 'params' bukan promise, await tidak akan mengubah perilakunya.
-    // Jika 'params' adalah promise di environment Vercel, ini akan menunggunya.
-    const resolvedParams = await params;
-    const { namaBuah } = resolvedParams;
+    // Await context.params untuk memastikan sudah resolve,
+    // berdasarkan pesan error runtime Vercel sebelumnya.
+    const routeParams = await context.params;
+    const { namaBuah } = routeParams; // Akses namaBuah dari params yang sudah di-resolve
 
     if (!namaBuah) {
       return NextResponse.json(
@@ -45,7 +45,6 @@ export async function GET(
 
     return NextResponse.json(buah, { status: 200 });
   } catch (error: any) {
-    // Ubah tipe error ke any untuk menangani error.message
     console.error("Kesalahan saat mengambil data buah:", error);
     const errorMessage =
       error instanceof Error
