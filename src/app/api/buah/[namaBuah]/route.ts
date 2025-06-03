@@ -3,6 +3,8 @@ import prisma from "@/lib/prisma";
 import type { FruitData } from "@/lib/definition";
 
 export async function GET(
+/* @next-codemod-error <suggested message> */
+/* @next-codemod-ignore */
   request: NextRequest,
   context: { params: { namaBuah: string } }
 ) {
