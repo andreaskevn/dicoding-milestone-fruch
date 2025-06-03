@@ -1,17 +1,14 @@
 // src/app/api/buah/[namaBuah]/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server"; // Menggunakan NextRequest
 import prisma from "@/lib/prisma";
 import type { FruitData } from "@/lib/definition";
 
 // Handler untuk GET request
 export async function GET(
-  request: Request,
-  // Destructure params langsung dan berikan tipe di sini
-  // Ini adalah cara standar untuk App Router Route Handlers
+  request: NextRequest, // Menggunakan NextRequest untuk konsistensi dengan Next.js
   { params }: { params: { namaBuah: string } }
 ) {
   try {
-    // Akses namaBuah langsung dari params yang sudah di-destructure
     const { namaBuah } = params;
 
     if (!namaBuah) {
@@ -22,6 +19,7 @@ export async function GET(
     }
 
     const decodedNamaBuah = decodeURIComponent(namaBuah);
+    console.log(`[API /api/buah/[namaBuah]] Mencari buah: ${decodedNamaBuah}`); // Logging sisi server
 
     const buah: FruitData | null = await prisma.buah.findUnique({
       where: {
@@ -30,15 +28,25 @@ export async function GET(
     });
 
     if (!buah) {
+      console.log(
+        `[API /api/buah/[namaBuah]] Buah "${decodedNamaBuah}" tidak ditemukan di database.`
+      );
       return NextResponse.json(
         { message: `Buah dengan nama "${decodedNamaBuah}" tidak ditemukan.` },
         { status: 404 }
       );
     }
 
+    console.log(
+      `[API /api/buah/[namaBuah]] Buah "${decodedNamaBuah}" ditemukan:`,
+      buah
+    );
     return NextResponse.json(buah, { status: 200 });
   } catch (error: any) {
-    console.error("Kesalahan saat mengambil data buah:", error);
+    console.error(
+      "[API /api/buah/[namaBuah]] Kesalahan saat mengambil data buah:",
+      error
+    );
     const errorMessage =
       error instanceof Error
         ? error.message
