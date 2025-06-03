@@ -7,20 +7,20 @@ import type { FruitData } from "@/lib/definition";
 export async function GET(
   request: NextRequest,
   // Menggunakan 'context' sebagai nama parameter dan mendefinisikan tipenya secara eksplisit
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ namaBuah: string }> }
 ) {
   try {
     // Akses namaBuah dari context.params
-    const { id } = context.params;
+    const namaBuah  = (await params).namaBuah;
 
-    if (!id) {
+    if (!namaBuah) {
       return NextResponse.json(
         { message: "Nama buah wajib disertakan sebagai parameter." },
         { status: 400 }
       );
     }
 
-    const decodedNamaBuah = decodeURIComponent(id);
+    const decodedNamaBuah = decodeURIComponent(namaBuah);
     console.log(`[API /api/buah/[namaBuah]] Mencari buah: ${decodedNamaBuah}`);
 
     const buah: FruitData | null = await prisma.buah.findUnique({
