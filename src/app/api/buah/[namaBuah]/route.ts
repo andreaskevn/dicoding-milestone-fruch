@@ -7,9 +7,14 @@ interface Params {
 }
 
 // Handler untuk GET request
-export async function GET(request: Request, { params }: { params: Params }) {
+export async function GET(
+  request: Request,
+  context: { params: Params } | { params: Promise<Params> }
+) {
   try {
-    const { namaBuah } = params;
+    // Await context.params untuk memastikan sudah resolve jika berupa Promise
+    const routeParams = await context.params;
+    const { namaBuah } = routeParams;
 
     if (!namaBuah) {
       return NextResponse.json(
