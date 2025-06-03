@@ -1,3 +1,4 @@
+// src/app/api/buah/[namaBuah]/route.ts
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import type { FruitData } from "@/lib/definition";
@@ -9,12 +10,16 @@ interface Params {
 // Handler untuk GET request
 export async function GET(
   request: Request,
-  context: { params: Params } | { params: Promise<Params> }
+  // Gunakan signature standar yang diterima TypeScript untuk RouteContext
+  { params }: { params: Params }
 ) {
   try {
-    // Await context.params untuk memastikan sudah resolve jika berupa Promise
-    const routeParams = await context.params;
-    const { namaBuah } = routeParams;
+    // Meskipun 'params' di sini secara tipe adalah objek biasa (Params),
+    // kita akan coba await berdasarkan pesan error runtime Vercel.
+    // Jika 'params' bukan promise, await tidak akan mengubah perilakunya.
+    // Jika 'params' adalah promise di environment Vercel, ini akan menunggunya.
+    const resolvedParams = await params;
+    const { namaBuah } = resolvedParams;
 
     if (!namaBuah) {
       return NextResponse.json(
@@ -39,7 +44,8 @@ export async function GET(
     }
 
     return NextResponse.json(buah, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
+    // Ubah tipe error ke any untuk menangani error.message
     console.error("Kesalahan saat mengambil data buah:", error);
     const errorMessage =
       error instanceof Error
