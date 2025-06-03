@@ -1,5 +1,4 @@
 // src/app/api/scan/[id]/route.ts
-// (atau src/app/api/buah/[id]/route.ts jika Anda tetap menggunakan path itu)
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
@@ -16,13 +15,16 @@ interface JwtPayload {
 
 export async function DELETE(
   request: NextRequest,
-  // Mencoba signature di mana 'params' adalah Promise, sesuai saran Anda
+  // Menggunakan signature di mana 'params' adalah Promise
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
+  // Deklarasikan scanId di scope yang lebih tinggi agar bisa diakses di catch block
+  let scanIdForLogging: string | undefined;
+
   try {
-    // Await 'params' untuk mendapatkan objek yang berisi 'id'
     const resolvedParams = await params;
-    const { id: scanId } = resolvedParams; // 'id' dari URL adalah scanId
+    const { id: scanId } = resolvedParams;
+    scanIdForLogging = scanId; // Set nilainya di sini
 
     if (!scanId) {
       return NextResponse.json(
@@ -31,9 +33,8 @@ export async function DELETE(
       );
     }
 
-    let imagePathToDelete: string | null = null;
+    let imagePathToDelete: string | null = null; // 1. Autentikasi Pengguna
 
-    // 1. Autentikasi Pengguna
     const authHeader = request.headers.get("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json(
@@ -81,9 +82,8 @@ export async function DELETE(
         { status: 401 }
       );
     }
-    const currentUserId: string = decodedPayload.userId;
+    const currentUserId: string = decodedPayload.userId; // 2. Cari entri scanBuah di database
 
-    // 2. Cari entri scanBuah di database
     const scanToDelete = await prisma.scanBuah.findUnique({
       where: { id: scanId },
     });
@@ -96,9 +96,8 @@ export async function DELETE(
         },
         { status: 404 }
       );
-    }
+    } // 3. Otorisasi: Pastikan pengguna hanya menghapus riwayat miliknya
 
-    // 3. Otorisasi: Pastikan pengguna hanya menghapus riwayat miliknya
     if (scanToDelete.userId !== currentUserId) {
       return NextResponse.json(
         {
@@ -119,14 +118,12 @@ export async function DELETE(
         "public",
         scanToDelete.imageUrl
       );
-    }
+    } // 4. Hapus entri dari database
 
-    // 4. Hapus entri dari database
     await prisma.scanBuah.delete({
       where: { id: scanId },
-    });
+    }); // 5. Hapus file gambar terkait dari server (jika ada dan merupakan file lokal)
 
-    // 5. Hapus file gambar terkait dari server (jika ada dan merupakan file lokal)
     if (imagePathToDelete) {
       try {
         await fs.access(imagePathToDelete);
@@ -154,14 +151,16 @@ export async function DELETE(
     );
   } catch (error: any) {
     console.error(
-      `Kesalahan saat menghapus riwayat scan ID "${scanId}":`,
+      // Menggunakan scanIdForLogging yang dideklarasikan di scope luar try-catch
+      `Kesalahan saat menghapus riwayat scan ID "${scanIdForLogging || "tidak diketahui"}":`,
       error
     );
     let errorMessage = "Gagal menghapus riwayat scan.";
     let statusCode = 500;
 
     if (error.code === "P2025") {
-      errorMessage = `Riwayat scan dengan ID "${scanId}" tidak ditemukan untuk dihapus.`;
+      // Menggunakan scanIdForLogging
+      errorMessage = `Riwayat scan dengan ID "${scanIdForLogging || "tidak diketahui"}" tidak ditemukan untuk dihapus.`;
       statusCode = 404;
     } else if (error instanceof Error) {
       errorMessage = error.message;
