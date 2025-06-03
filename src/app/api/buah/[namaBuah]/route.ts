@@ -3,11 +3,11 @@ import prisma from "@/lib/prisma";
 import type { FruitData } from "@/lib/definition";
 
 export async function GET(
-  request: NextRequest,
-  context: { params: { namaBuah: string } }
+  _request: NextRequest,
+  { params }: { params: { namaBuah: string } }
 ) {
   try {
-    const { namaBuah } = context.params;
+    const { namaBuah } = await params;
 
     if (!namaBuah) {
       return NextResponse.json(
