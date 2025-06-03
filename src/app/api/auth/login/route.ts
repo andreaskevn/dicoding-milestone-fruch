@@ -66,7 +66,7 @@ export async function POST(
     // Menggunakan SignOptions secara eksplisit
     const signOptions: SignOptions = {
       // Hapus type assertion 'as jwt.StringValue' karena tidak diperlukan dan menyebabkan error
-      expiresIn: jwtExpiresIn,
+      expiresIn: "1h", // Default ke 1 jam jika tidak ada di environment
       // algorithm: 'HS256' // Anda bisa biarkan ini dikomentari jika HS256 adalah default yang diinginkan
     };
 
