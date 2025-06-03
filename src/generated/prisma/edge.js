@@ -151,7 +151,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/root/dicoding/dicoding-milestone-fruch/src/generated/prisma",
+      "value": "D:\\Materi\\Kuliah\\Kerjaan\\Asisten Dosen\\PBO\\Code\\DICODING\\dicoding-milestone-fruch\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -160,12 +160,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/root/dicoding/dicoding-milestone-fruch/prisma/schema.prisma",
+    "sourceFilePath": "D:\\Materi\\Kuliah\\Kerjaan\\Asisten Dosen\\PBO\\Code\\DICODING\\dicoding-milestone-fruch\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -179,7 +179,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
