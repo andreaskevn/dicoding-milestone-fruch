@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import * as bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions} from "jsonwebtoken";
 import prisma from "@/lib/prisma";
 
 export async function POST(request: Request): Promise<Response> {
@@ -34,7 +34,7 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     const jwtSecret = process.env.JWT_SECRET;
-    const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "1h";
+    const jwtExpiresIn = process.env.JWT_EXPIRES_IN || '1h';
 
     if (!jwtSecret) {
       console.error("JWT_SECRET tidak ditemukan di environment variables.");
@@ -49,9 +49,18 @@ export async function POST(request: Request): Promise<Response> {
       email: user.email,
     };
 
-    const token = jwt.sign(payload, jwtSecret, {
+    // const token = jwt.sign(payload, jwtSecret, {
+    //   expiresIn: jwtExpiresIn,
+    // });
+
+    const signOptions: SignOptions = {
       expiresIn: jwtExpiresIn,
-    });
+      // Anda bisa menambahkan algoritma di sini jika perlu, defaultnya HS256
+      // algorithm: 'HS256'
+    };
+
+    // Buat token JWT menggunakan objek signOptions yang sudah ditipekan
+    const token = jwt.sign(payload, jwtSecret, signOptions);
 
     console.log("Token:", token);
 
