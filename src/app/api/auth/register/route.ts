@@ -38,7 +38,6 @@ export async function POST(request: Request): Promise<Response> {
       },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { passwordHash: _, ...result } = user;
     return NextResponse.json({ result }, { status: 201 });
   } catch (e) {
