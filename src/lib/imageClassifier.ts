@@ -110,21 +110,10 @@ export async function classifyImage(
     );
   } finally {
     if (tensor) tensor.dispose();
-    if (predictionsOutput) {
-      if (predictionsOutput instanceof tf.Tensor) {
-        predictionsOutput.dispose();
-      } else if (
-        typeof predictionsOutput === "object" &&
-        predictionsOutput !== null
-      ) {
-        Object.values(predictionsOutput).forEach((t: tf.Tensor) => {
-          // Beri tipe eksplisit pada 't'
-          if (t instanceof tf.Tensor) {
-            // Pastikan t adalah Tensor sebelum dispose
-            t.dispose();
-          }
-        });
-      }
+    // Karena predictionsOutput sekarang diharapkan selalu tf.Tensor (atau null),
+    // kita bisa langsung memanggil dispose jika ia adalah instance dari tf.Tensor.
+    if (predictionsOutput instanceof tf.Tensor) {
+      predictionsOutput.dispose();
     }
     console.log("Tensor dibersihkan.");
   }
