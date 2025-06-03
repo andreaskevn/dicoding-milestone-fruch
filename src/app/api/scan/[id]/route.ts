@@ -1,22 +1,24 @@
-// src/app/api/buah/[id]/route.ts
-
-import { NextResponse } from "next/server";
+// src/app/api/scan/[id]/route.ts
+// (atau src/app/api/buah/[id]/route.ts jika Anda tetap menggunakan path itu)
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken"; // Pastikan tipe JwtPayload diimpor atau didefinisikan jika digunakan
 import fs from "fs/promises";
 import path from "path";
 
-interface DeleteScanParams {
-  params: {
-    id: string; // ID dari scanBuah yang akan dihapus
-  };
+// Definisikan tipe untuk payload JWT Anda jika belum global
+interface JwtPayload {
+  userId: string;
+  email?: string;
+  iat?: number;
+  exp?: number;
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: DeleteScanParams
+  request: NextRequest, // Menggunakan NextRequest
+  { params }: { params: { id: string } } // Signature standar untuk params
 ): Promise<NextResponse> {
-  const { id: scanId } = params;
+  const { id: scanId } = params; // 'id' dari URL adalah scanId
 
   if (!scanId) {
     return NextResponse.json(
@@ -56,6 +58,7 @@ export async function DELETE(
     try {
       decodedPayload = jwt.verify(token, jwtSecret) as JwtPayload;
     } catch (error) {
+      console.error("Error verifikasi JWT:", error);
       return NextResponse.json(
         {
           message: "Token tidak valid atau sudah kedaluwarsa.",
@@ -65,7 +68,12 @@ export async function DELETE(
       );
     }
 
-    if (typeof decodedPayload.userId !== "string" || !decodedPayload.userId) {
+    // Pastikan decodedPayload dan userId ada dan bertipe string
+    if (
+      !decodedPayload ||
+      typeof decodedPayload.userId !== "string" ||
+      !decodedPayload.userId
+    ) {
       return NextResponse.json(
         { message: "User ID tidak valid dalam token.", error: "Unauthorized" },
         { status: 401 }
@@ -99,12 +107,17 @@ export async function DELETE(
       );
     }
 
-    // Simpan path gambar untuk dihapus nanti
-    if (scanToDelete.imageUrl) {
+    // Simpan path gambar untuk dihapus nanti (jika imageUrl adalah path relatif di public)
+    // Jika imageUrl adalah URL eksternal atau data URI base64, logika ini perlu disesuaikan
+    if (
+      scanToDelete.imageUrl &&
+      !scanToDelete.imageUrl.startsWith("http") &&
+      !scanToDelete.imageUrl.startsWith("data:")
+    ) {
       imagePathToDelete = path.join(
         process.cwd(),
-        "public",
-        scanToDelete.imageUrl
+        "public", // Asumsi gambar disimpan di folder public
+        scanToDelete.imageUrl // Asumsi imageUrl adalah path relatif dari public, misal /uploads/scan/gambar.jpg
       );
     }
 
@@ -113,24 +126,34 @@ export async function DELETE(
       where: { id: scanId },
     });
 
-    // 5. Hapus file gambar terkait dari server (jika ada)
+    // 5. Hapus file gambar terkait dari server (jika ada dan merupakan file lokal)
     if (imagePathToDelete) {
       try {
-        await fs.access(imagePathToDelete); // Cek apakah file ada
+        await fs.access(imagePathToDelete);
         await fs.unlink(imagePathToDelete);
-        console.log(`File gambar ${scanToDelete.imageUrl} berhasil dihapus.`);
-      } catch (fileError) {
-        // Abaikan jika file tidak ditemukan (mungkin sudah terhapus atau path salah)
-        console.warn(
-          `Gagal menghapus file gambar ${scanToDelete.imageUrl} atau file tidak ditemukan:`,
-          fileError
+        console.log(
+          `File gambar ${scanToDelete.imageUrl} berhasil dihapus dari ${imagePathToDelete}.`
         );
+      } catch (fileError: any) {
+        // Abaikan jika file tidak ditemukan (mungkin sudah terhapus atau path salah)
+        // atau jika fs.access melempar error karena file tidak ada
+        if (fileError.code !== "ENOENT") {
+          // ENOENT = Error NO ENTry (file not found)
+          console.warn(
+            `Gagal menghapus file gambar ${scanToDelete.imageUrl} atau file tidak ditemukan:`,
+            fileError
+          );
+        } else {
+          console.log(
+            `File gambar ${scanToDelete.imageUrl} tidak ditemukan untuk dihapus (mungkin sudah terhapus atau path salah).`
+          );
+        }
       }
     }
 
     return NextResponse.json(
       { message: `Riwayat scan dengan ID "${scanId}" berhasil dihapus.` },
-      { status: 200 } // Bisa juga 204 No Content jika tidak ada body respons
+      { status: 200 }
     );
   } catch (error: any) {
     console.error(
@@ -141,7 +164,6 @@ export async function DELETE(
     let statusCode = 500;
 
     if (error.code === "P2025") {
-      // Record to delete does not exist (Prisma)
       errorMessage = `Riwayat scan dengan ID "${scanId}" tidak ditemukan untuk dihapus.`;
       statusCode = 404;
     } else if (error instanceof Error) {
@@ -149,7 +171,7 @@ export async function DELETE(
     }
 
     return NextResponse.json(
-      { message: errorMessage, error: "Internal Server Error" },
+      { message: errorMessage, error: "Internal Server Error" }, // Sebaiknya error di sini lebih spesifik jika diketahui
       { status: statusCode }
     );
   }
