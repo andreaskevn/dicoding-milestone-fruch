@@ -4,12 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/context/authContext";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -53,6 +55,34 @@ export default function Header() {
     setIsProfileDropdownOpen(false);
   };
 
+  // Function to check if link is active
+  const isActiveLink = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(href);
+  };
+
+  // Function to get link classes with active state
+  const getLinkClasses = (href: string, baseClasses: string) => {
+    const isActive = isActiveLink(href);
+    return `${baseClasses} ${
+      isActive
+        ? "text-emerald-600 border-b-2 border-emerald-600"
+        : "text-emerald-800 hover:text-emerald-600"
+    } transition-colors relative`;
+  };
+
+  // Function to get mobile link classes with active state
+  const getMobileLinkClasses = (href: string, baseClasses: string) => {
+    const isActive = isActiveLink(href);
+    return `${baseClasses} ${
+      isActive
+        ? "text-emerald-600 bg-emerald-50 border-l-4 border-emerald-600"
+        : "text-emerald-800 hover:text-emerald-600 hover:bg-emerald-50"
+    } transition-colors`;
+  };
+
   return (
     <>
       {/* Header/Navigation */}
@@ -69,15 +99,18 @@ export default function Header() {
             <h1 className="text-2xl font-bold text-emerald-700">Fruch</h1>
           </div>
           <nav className="hidden md:flex gap-6 items-center">
-            <Link
-              href="/"
-              className="text-emerald-800 font-bold hover:text-emerald-600 transition-colors"
-            >
+            <Link href="/" className={getLinkClasses("/", "font-bold pb-1")}>
               Beranda
             </Link>
             <Link
+              href="/about"
+              className={getLinkClasses("/about", "font-bold pb-1")}
+            >
+              About Us
+            </Link>
+            <Link
               href="/classify"
-              className="text-emerald-800 font-bold hover:text-emerald-600 transition-colors"
+              className={getLinkClasses("/classify", "font-bold pb-1")}
             >
               Deteksi Buah
             </Link>
@@ -85,7 +118,7 @@ export default function Header() {
             {isAuthenticated && (
               <Link
                 href="/history"
-                className="text-emerald-800 font-bold hover:text-emerald-600 transition-colors"
+                className={getLinkClasses("/history", "font-bold pb-1")}
               >
                 Riwayat Scan
               </Link>
@@ -153,7 +186,11 @@ export default function Header() {
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 border border-gray-100 animate-fadeInDown animate-fadeInUp">
                     <Link
                       href="/users"
-                      className="block px-4 py-2 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-all duration-200 ease-in-out transform hover:translate-x-1"
+                      className={`block px-4 py-2 hover:bg-emerald-50 transition-all duration-200 ease-in-out transform hover:translate-x-1 ${
+                        isActiveLink("/users")
+                          ? "text-emerald-700 bg-emerald-50"
+                          : "text-gray-700 hover:text-emerald-700"
+                      }`}
                       onClick={() => setIsProfileDropdownOpen(false)}
                     >
                       <div className="flex items-center">
@@ -339,14 +376,30 @@ export default function Header() {
             )}
             <Link
               href="/"
-              className="text-emerald-800 font-medium hover:text-emerald-600 transition-colors py-3 px-4 hover:bg-emerald-50 rounded-lg"
+              className={getMobileLinkClasses(
+                "/",
+                "font-medium py-3 px-4 rounded-lg"
+              )}
               onClick={toggleMenu}
             >
               Beranda
             </Link>
             <Link
+              href="/about"
+              className={getMobileLinkClasses(
+                "/about",
+                "font-medium py-3 px-4 rounded-lg"
+              )}
+              onClick={toggleMenu}
+            >
+              About Us
+            </Link>
+            <Link
               href="/classify"
-              className="text-emerald-800 font-medium hover:text-emerald-600 transition-colors py-3 px-4 hover:bg-emerald-50 rounded-lg"
+              className={getMobileLinkClasses(
+                "/classify",
+                "font-medium py-3 px-4 rounded-lg"
+              )}
               onClick={toggleMenu}
             >
               Deteksi Buah
@@ -355,7 +408,10 @@ export default function Header() {
             {isAuthenticated && (
               <Link
                 href="/history"
-                className="text-emerald-800 font-medium hover:text-emerald-600 transition-colors py-3 px-4 hover:bg-emerald-50 rounded-lg"
+                className={getMobileLinkClasses(
+                  "/history",
+                  "font-medium py-3 px-4 rounded-lg"
+                )}
                 onClick={toggleMenu}
               >
                 Riwayat Scan
@@ -366,14 +422,20 @@ export default function Header() {
               <>
                 <Link
                   href="/login"
-                  className="text-emerald-800 font-medium hover:text-emerald-600 transition-colors py-3 px-4 hover:bg-emerald-50 rounded-lg"
+                  className={getMobileLinkClasses(
+                    "/login",
+                    "font-medium py-3 px-4 rounded-lg"
+                  )}
                   onClick={toggleMenu}
                 >
                   Masuk
                 </Link>
                 <Link
                   href="/register"
-                  className="text-emerald-800 font-medium hover:text-emerald-600 transition-colors py-3 px-4 hover:bg-emerald-50 rounded-lg"
+                  className={getMobileLinkClasses(
+                    "/register",
+                    "font-medium py-3 px-4 rounded-lg"
+                  )}
                   onClick={toggleMenu}
                 >
                   Daftar
@@ -383,7 +445,7 @@ export default function Header() {
               <>
                 <Link
                   href="/users"
-                  className="text-emerald-800 font-medium hover:text-emerald-600 transition-colors py-3 px-4 hover:bg-emerald-50 rounded-lg flex items-center"
+                  className={`${getMobileLinkClasses("/users", "font-medium py-3 px-4 rounded-lg")} flex items-center`}
                   onClick={toggleMenu}
                 >
                   <svg

@@ -180,6 +180,7 @@ const config = {
   ],
   "activeProvider": "postgresql",
   "postinstall": false,
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
