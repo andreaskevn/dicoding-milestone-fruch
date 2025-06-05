@@ -188,126 +188,69 @@ export default function HistoryPage() {
   };
 
   // Delete individual scan via API
-  const deleteSingleScan = async (scanId: string): Promise<boolean> => {
-    try {
-      const response = await fetch(`/api/scan/${scanId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Gagal menghapus scan");
-      }
-
-      return true;
-    } catch (error) {
-      console.error("Error deleting scan:", error);
-      return false;
-    }
-  };
-
   const deleteSelectedItems = async () => {
-    if (selectedItems.size === 0) return;
+  if (selectedItems.size === 0) return;
 
-    const confirmDelete = await Swal.fire({
-      icon: "warning",
-      title: "Konfirmasi Hapus",
-      html: `Apakah Anda yakin ingin menghapus <strong>${selectedItems.size}</strong> item yang dipilih?`,
-      showCancelButton: true,
-      confirmButtonColor: "#dc2626",
-      cancelButtonColor: "#6b7280",
-      confirmButtonText: "Ya, Hapus!",
-      cancelButtonText: "Batal",
-      reverseButtons: true,
-      focusCancel: true,
+  const confirmDelete = await Swal.fire({
+    icon: "warning",
+    title: "Konfirmasi Hapus",
+    html: `Apakah Anda yakin ingin menghapus <strong>${selectedItems.size}</strong> item yang dipilih?<br><br><small class="text-gray-500">Semua riwayat scan Anda akan dihapus.</small>`,
+    showCancelButton: true,
+    confirmButtonColor: "#dc2626",
+    cancelButtonColor: "#6b7280",
+    confirmButtonText: "Ya, Hapus Semua!",
+    cancelButtonText: "Batal",
+    reverseButtons: true,
+    focusCancel: true,
+  });
+
+  if (!confirmDelete.isConfirmed) return;
+
+  try {
+    setIsDeleting(true);
+
+    const response = await fetch("/api/scan", {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
-    if (!confirmDelete) return;
-
-    try {
-      setIsDeleting(true);
-
-      // Convert Set to Array for deletion
-      const itemsToDelete = Array.from(selectedItems);
-
-      // Keep track of successful and failed deletions
-      const deletionPromises = itemsToDelete.map(async (scanId) => {
-        const success = await deleteSingleScan(scanId);
-        return { scanId, success };
-      });
-
-      const deletionResults = await Promise.all(deletionPromises);
-
-      // Separate successful and failed deletions
-      const successfulDeletions = deletionResults
-        .filter((result) => result.success)
-        .map((result) => result.scanId);
-
-      const failedDeletions = deletionResults
-        .filter((result) => !result.success)
-        .map((result) => result.scanId);
-
-      // Update local state by removing successfully deleted items
-      if (successfulDeletions.length > 0) {
-        setScanHistory((prevHistory) =>
-          prevHistory.filter((item) => !successfulDeletions.includes(item.id))
-        );
-      }
-
-      // Clear selections and exit delete mode
-      setSelectedItems(new Set());
-      setIsDeleteMode(false);
-
-      // Adjust current page if needed
-      const remainingItems = scanHistory.length - successfulDeletions.length;
-      const newTotalPages = Math.ceil(remainingItems / itemsPerPage);
-      if (currentPage > newTotalPages && newTotalPages > 0) {
-        setCurrentPage(newTotalPages);
-      }
-
-      // Show result message
-      if (failedDeletions.length > 0) {
-        Swal.fire({
-          icon: "warning",
-          title: "Hapus Sebagian Berhasil",
-          html: `
-            <div class="text-left">
-              <p><strong class="text-green-600">${successfulDeletions.length}</strong> item berhasil dihapus</p>
-              <p><strong class="text-red-600">${failedDeletions.length}</strong> item gagal dihapus</p>
-              <br>
-              <small class="text-gray-500">Silakan coba lagi untuk item yang gagal dihapus.</small>
-            </div>
-          `,
-          confirmButtonColor: "#059669",
-          confirmButtonText: "OK",
-        });
-      } else {
-        Swal.fire({
-          icon: "success",
-          title: "Berhasil Dihapus!",
-          text: `${successfulDeletions.length} item berhasil dihapus.`,
-          confirmButtonColor: "#059669",
-          confirmButtonText: "OK",
-          timer: 3000,
-          timerProgressBar: true,
-        });
-      }
-    } catch (err) {
-      console.error("Error deleting items:", err);
-      Swal.fire({
-        icon: "error",
-        title: "Gagal Menghapus",
-        text: "Terjadi kesalahan saat menghapus item. Silakan coba lagi.",
-        confirmButtonColor: "#059669",
-        confirmButtonText: "OK",
-      });
-    } finally {
-      setIsDeleting(false);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Gagal menghapus riwayat scan");
     }
-  };
+
+    const result = await response.json();
+
+    // Clear all data and reset state
+    setScanHistory([]);
+    setSelectedItems(new Set());
+    setIsDeleteMode(false);
+    setCurrentPage(1);
+
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil Dihapus!",
+      text: `${result.count} riwayat scan berhasil dihapus.`,
+      confirmButtonColor: "#059669",
+      confirmButtonText: "OK",
+      timer: 3000,
+      timerProgressBar: true,
+    });
+  } catch (err) {
+    console.error("Error deleting items:", err);
+    Swal.fire({
+      icon: "error",
+      title: "Gagal Menghapus",
+      text: err instanceof Error ? err.message : "Terjadi kesalahan saat menghapus riwayat scan.",
+      confirmButtonColor: "#059669",
+      confirmButtonText: "OK",
+    });
+  } finally {
+    setIsDeleting(false);
+  }
+};
 
   // Pagination calculations
   const totalPages = Math.ceil(scanHistory.length / itemsPerPage);
